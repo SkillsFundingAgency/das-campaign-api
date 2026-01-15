@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="SFA.DAS.Campaign.Api/SFA.DAS.Campaign.Api.csproj" />
+  <Project Path="SFA.DAS.Campaign.Database/SFA.DAS.Campaign.Database.sqlproj" Id="4ad49e2c-c8d0-46e7-88ad-fdb1f01e2138">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>
