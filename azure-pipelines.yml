@@ -13,7 +13,7 @@ trigger:
 
 variables:
 - name: SolutionBaseName
-  value: SFA.DAS.Campaign
+  value: SFA.DAS.Campaign.Api
 - name: BuildConfiguration
   value: release
 - name: BuildPlatform
