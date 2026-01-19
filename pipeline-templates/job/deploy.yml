@@ -34,8 +34,8 @@ jobs:
             SubscriptionId: $(SubscriptionId)
             Location: $(ResourceGroupLocation)
             Environment: ${{ parameters.Environment }}
-            TemplatePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.json
-            ParametersPath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.parameters.json
+            TemplatePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}.Api/azure/template.json
+            ParametersPath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}.Api/azure/template.parameters.json
             IsMultiRepoCheckout: true
             TemplateSecrets:
               LoggingRedisConnectionString: $(LoggingRedisConnectionString)
