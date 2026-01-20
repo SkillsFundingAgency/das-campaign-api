@@ -1,0 +1,73 @@
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Options;
+using SFA.DAS.Campaign.Api.Data.Configuration;
+using SFA.DAS.Campaign.Api.Domain.Configuration;
+using SFA.DAS.Campaign.Api.Domain.Entities;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
+namespace SFA.DAS.Campaign.Api.Data;
+
+public interface ICampaigntDataContext
+{
+    DbSet<UserDataEntity> UserDataEntities { get; }
+    DatabaseFacade Database { get; }
+    Task Ping(CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    void SetValues<TEntity>(TEntity to, TEntity from) where TEntity : class;
+}
+
+[ExcludeFromCodeCoverage]
+public class CampaigntDataContext : DbContext, ICampaigntDataContext
+{
+    public DbSet<UserDataEntity> UserDataEntities { get; set; }
+
+    private readonly ConnectionStrings? _configuration;
+    public CampaigntDataContext() { }
+    public CampaigntDataContext(DbContextOptions options) : base(options) { }
+
+    public CampaigntDataContext(IOptions<ConnectionStrings> config, DbContextOptions options) : base(options)
+    {
+        _configuration = config.Value;
+    }
+
+    public async Task Ping(CancellationToken cancellationToken)
+    {
+        await Database
+            .ExecuteSqlRawAsync("SELECT 1;", cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public void SetValues<TEntity>(TEntity to, TEntity from) where TEntity : class
+    {
+        Entry(to).CurrentValues.SetValues(from);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+
+        if (_configuration == null)
+        {
+            optionsBuilder.UseSqlServer().UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            return;
+        }
+
+        var connection = new SqlConnection { ConnectionString = _configuration!.SqlConnectionString, };
+        optionsBuilder.UseSqlServer(connection, options => 
+                        options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(20), null)).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+        // Note: useful to keep here
+        optionsBuilder.LogTo(message => Debug.WriteLine(message));
+        optionsBuilder.EnableDetailedErrors();
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new UserDataEntityConfiguration());
+
+        base.OnModelCreating(modelBuilder);
+    }
+}
