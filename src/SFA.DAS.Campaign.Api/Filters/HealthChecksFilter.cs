@@ -1,7 +1,7 @@
-﻿using Microsoft.OpenApi;
+﻿using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Nodes;
 
 namespace SFA.DAS.Campaign.Api.Filters;
 
@@ -14,9 +14,7 @@ public class HealthChecksFilter : IDocumentFilter
     {
         var pathItem = new OpenApiPathItem();
         var operation = new OpenApiOperation();
-
-        operation.Tags ??= new HashSet<OpenApiTagReference>();
-        operation.Tags.Add(new OpenApiTagReference("Service Status", swaggerDoc, null));
+        operation.Tags.Add(new OpenApiTag { Name = "Service Status" });
 
         operation.Responses ??= [];
 
@@ -28,10 +26,8 @@ public class HealthChecksFilter : IDocumentFilter
                 {
                     Schema = new OpenApiSchema
                     {
-                        Type = JsonSchemaType.String,
-                        Enum = [
-                            JsonValue.Create("Healthy"),
-                        ]
+                        Type = "string",
+                        Enum = [new OpenApiString("Healthy"),]
                     }
                 }
             }
@@ -47,15 +43,14 @@ public class HealthChecksFilter : IDocumentFilter
         {
             Schema = new OpenApiSchema
             {
-                Type = JsonSchemaType.String,
-                Enum = [
-                    JsonValue.Create("Unhealthy"),
-                ]
+                Type = "string",
+                Enum = [new OpenApiString("Unhealthy"),]
             }
         };
 
         operation.Responses.Add("503", unhealthyResponse);
-        pathItem.AddOperation(HttpMethod.Get, operation);
+        pathItem.AddOperation(OperationType.Get, operation);
         swaggerDoc?.Paths.Add(HealthCheckEndpoint, pathItem);
     }
+
 }

@@ -3,10 +3,9 @@ using SFA.DAS.Campaign.Api.Core;
 using SFA.DAS.Campaign.Api.Data.Repositories;
 using SFA.DAS.Campaign.Api.Domain.Entities;
 using SFA.DAS.Campaign.Api.Domain.Models;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 
-namespace SFA.DAS.Campaign.Api;
+namespace SFA.DAS.Campaign.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

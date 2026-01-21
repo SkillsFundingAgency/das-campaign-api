@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.Campaign.Api.Data;
 
-public interface ICampaigntDataContext
+public interface ICampaignDataContext
 {
     DbSet<UserDataEntity> UserDataEntities { get; }
     DatabaseFacade Database { get; }
@@ -20,15 +20,15 @@ public interface ICampaigntDataContext
 }
 
 [ExcludeFromCodeCoverage]
-public class CampaigntDataContext : DbContext, ICampaigntDataContext
+public class CampaignDataContext : DbContext, ICampaignDataContext
 {
     public DbSet<UserDataEntity> UserDataEntities { get; set; }
 
     private readonly ConnectionStrings? _configuration;
-    public CampaigntDataContext() { }
-    public CampaigntDataContext(DbContextOptions options) : base(options) { }
+    public CampaignDataContext() { }
+    public CampaignDataContext(DbContextOptions options) : base(options) { }
 
-    public CampaigntDataContext(IOptions<ConnectionStrings> config, DbContextOptions options) : base(options)
+    public CampaignDataContext(IOptions<ConnectionStrings> config, DbContextOptions options) : base(options)
     {
         _configuration = config.Value;
     }

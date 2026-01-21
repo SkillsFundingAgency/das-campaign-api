@@ -1,6 +1,6 @@
-using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SFA.DAS.Campaign.Api.Filters;
 

@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SFA.DAS.Api.Common.AppStart;
@@ -46,6 +47,7 @@ internal class Startup
 
 #if DEBUG
         config.AddJsonFile("appsettings.Development.json", true);
+        config.AddJsonFile("appsettings.json", true);
 #endif
         Configuration = config.Build();
     }
@@ -68,7 +70,7 @@ internal class Startup
             };
             services.AddAuthentication(azureAdConfiguration, policies);
             services.AddHealthChecks()
-                    .AddDbContextCheck<CampaigntDataContext>();
+                    .AddDbContextCheck<CampaignDataContext>();
         }
 
         services.Configure<ConnectionStrings>(Configuration.GetSection(nameof(ConnectionStrings)));
@@ -97,13 +99,13 @@ internal class Startup
         services.ConfigureHealthChecks();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SFA.DAS.Campaign.Api", Version = "v1" });
-                c.OperationFilter<SwaggerVersionHeaderFilter>();
-                c.DocumentFilter<JsonPatchDocumentFilter>();
-                c.DocumentFilter<HealthChecksFilter>();
-                c.MapType<UserData>(() => new OpenApiSchema { Type = JsonSchemaType.String });
-            });
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recruit.Api", Version = "v1" });
+            c.OperationFilter<SwaggerVersionHeaderFilter>();
+            c.DocumentFilter<JsonPatchDocumentFilter>();
+            c.DocumentFilter<HealthChecksFilter>();
+            c.MapType<UserData>(() => new OpenApiSchema { Type = "string" });
+        });
         services.AddApiVersioning(opt =>
             {
                 opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");

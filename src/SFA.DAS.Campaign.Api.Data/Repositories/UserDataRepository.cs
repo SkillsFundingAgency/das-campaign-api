@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.Campaign.Api.Domain.Entities;
-using SFA.DAS.Recruit.Api.Data.Models;
+using SFA.DAS.Campaign.Api.Data.Models;
 
 namespace SFA.DAS.Campaign.Api.Data.Repositories;
 
@@ -13,7 +13,7 @@ public interface IUserDataRepository
     Task<UpsertResult<UserDataEntity>> AddNewCampaignInterestAsync(UserDataEntity userData, CancellationToken cancellationToken);
 }
 
-public class UserDataRepository(ICampaigntDataContext dataContext) : IUserDataRepository
+public class UserDataRepository(ICampaignDataContext dataContext) : IUserDataRepository
 {
     public async Task<UpsertResult<UserDataEntity>> AddNewCampaignInterestAsync(UserDataEntity entity, CancellationToken cancellationToken = default)
     {
@@ -28,6 +28,7 @@ public class UserDataRepository(ICampaigntDataContext dataContext) : IUserDataRe
             return UpsertResult.Create(entity, false);
         }
     }
+
 
     public async Task<List<UserDataEntity>> GetAllForEmailAsync(string emailAddress, CancellationToken cancellationToken = default)
     {

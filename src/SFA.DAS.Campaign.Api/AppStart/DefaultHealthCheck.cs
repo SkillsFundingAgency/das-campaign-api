@@ -5,7 +5,7 @@ using SFA.DAS.Campaign.Api.Data;
 namespace SFA.DAS.Campaign.Api.AppStart;
 
 [ExcludeFromCodeCoverage]
-public class DefaultHealthCheck(ICampaigntDataContext dbContext) : IHealthCheck
+public class DefaultHealthCheck(ICampaignDataContext dbContext) : IHealthCheck
 {
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {

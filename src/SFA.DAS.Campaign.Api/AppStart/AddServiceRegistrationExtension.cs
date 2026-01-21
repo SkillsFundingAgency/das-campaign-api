@@ -26,15 +26,15 @@ public static class AddServiceRegistrationExtension
 
         if (string.Equals(environmentName, "DEV", StringComparison.CurrentCultureIgnoreCase))
         {
-            services.AddDbContext<CampaigntDataContext>(options => options.UseInMemoryDatabase("SFA.DAS.Campaign.Api"), ServiceLifetime.Transient);
+            services.AddDbContext<CampaignDataContext>(options => options.UseInMemoryDatabase("SFA.DAS.Campaign.Api"), ServiceLifetime.Transient);
         }
         else
         {
-            services.AddDbContext<CampaigntDataContext>(options => options.UseSqlServer(config.SqlConnectionString), ServiceLifetime.Transient);
+            services.AddDbContext<CampaignDataContext>(options => options.UseSqlServer(config.SqlConnectionString), ServiceLifetime.Transient);
         }
 
-        services.AddScoped<ICampaigntDataContext, CampaigntDataContext>(provider => provider.GetRequiredService<CampaigntDataContext>());
-        services.AddScoped(provider => new Lazy<CampaigntDataContext>(provider.GetRequiredService<CampaigntDataContext>));
+        services.AddScoped<ICampaignDataContext, CampaignDataContext>(provider => provider.GetRequiredService<CampaignDataContext>());
+        services.AddScoped(provider => new Lazy<CampaignDataContext>(provider.GetRequiredService<CampaignDataContext>));
     }
 
     public static void ConfigureHealthChecks(this IServiceCollection services)
