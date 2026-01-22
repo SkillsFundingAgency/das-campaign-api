@@ -24,11 +24,11 @@ public class CampaignDataContext : DbContext, ICampaignDataContext
 {
     public DbSet<UserDataEntity> UserDataEntities { get; set; }
 
-    private readonly ConnectionStrings? _configuration;
+    private readonly CampaignConfiguration? _configuration;
     public CampaignDataContext() { }
     public CampaignDataContext(DbContextOptions options) : base(options) { }
 
-    public CampaignDataContext(IOptions<ConnectionStrings> config, DbContextOptions options) : base(options)
+    public CampaignDataContext(IOptions<CampaignConfiguration> config, DbContextOptions options) : base(options)
     {
         _configuration = config.Value;
     }
@@ -60,7 +60,7 @@ public class CampaignDataContext : DbContext, ICampaignDataContext
                         options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(20), null)).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
         // Note: useful to keep here
-        optionsBuilder.LogTo(message => Debug.WriteLine(message));
+        //optionsBuilder.LogTo(message => Debug.WriteLine(message));
         optionsBuilder.EnableDetailedErrors();
     }
 

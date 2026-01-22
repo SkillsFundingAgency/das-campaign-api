@@ -20,7 +20,7 @@ public static class AddServiceRegistrationExtension
         services.AddScoped<IUserDataRepository, UserDataRepository>();
     }
 
-    public static void AddDatabaseRegistration(this IServiceCollection services, ConnectionStrings config, string? environmentName)
+    public static void AddDatabaseRegistration(this IServiceCollection services, CampaignConfiguration config, string? environmentName)
     {
         services.AddHttpContextAccessor();
 

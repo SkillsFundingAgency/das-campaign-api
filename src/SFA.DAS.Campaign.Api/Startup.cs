@@ -73,9 +73,9 @@ internal class Startup
                     .AddDbContextCheck<CampaignDataContext>();
         }
 
-        services.Configure<ConnectionStrings>(Configuration.GetSection(nameof(ConnectionStrings)));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<ConnectionStrings>>()!.Value);
-        var candidateAccountConfiguration = Configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>();
+        services.Configure<CampaignConfiguration>(Configuration.GetSection(nameof(CampaignConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<CampaignConfiguration>>()!.Value);
+        var candidateAccountConfiguration = Configuration.GetSection(nameof(CampaignConfiguration)).Get<CampaignConfiguration>();
 
         services.AddMvc(o =>
             {

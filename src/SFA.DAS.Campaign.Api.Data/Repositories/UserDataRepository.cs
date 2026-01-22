@@ -15,27 +15,27 @@ public interface IUserDataRepository
 
 public class UserDataRepository(ICampaignDataContext dataContext) : IUserDataRepository
 {
-    public async Task<UpsertResult<UserDataEntity>> AddNewCampaignInterestAsync(UserDataEntity entity, CancellationToken cancellationToken = default)
+    public async Task<UpsertResult<UserDataEntity>> AddNewCampaignInterestAsync(UserDataEntity userData, CancellationToken cancellationToken)
     {
         try
         {
-            await dataContext.UserDataEntities.AddAsync(entity, cancellationToken);
+            await dataContext.UserDataEntities.AddAsync(userData, cancellationToken);
             await dataContext.SaveChangesAsync(cancellationToken);
-            return UpsertResult.Create(entity, true);
+            return UpsertResult.Create(userData, true);
         }
         catch
         {
-            return UpsertResult.Create(entity, false);
+            return UpsertResult.Create(userData, false);
         }
     }
 
 
-    public async Task<List<UserDataEntity>> GetAllForEmailAsync(string emailAddress, CancellationToken cancellationToken = default)
+    public async Task<List<UserDataEntity>> GetAllForEmailAsync(string emailAddress, CancellationToken cancellationToken)
     {
         return await dataContext.UserDataEntities.Where(x => x.Email == emailAddress).ToListAsync(cancellationToken);
     }
 
-    public async Task<UserDataEntity?> GetLatestForEmailAsync(string emailAddress, CancellationToken cancellationToken = default)
+    public async Task<UserDataEntity?> GetLatestForEmailAsync(string emailAddress, CancellationToken cancellationToken)
     {
         return await dataContext.UserDataEntities
                         .Where(x => x.Email == emailAddress)

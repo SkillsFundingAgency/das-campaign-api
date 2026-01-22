@@ -1,9 +1,12 @@
 ﻿#nullable disable 
 
+using System.ComponentModel.DataAnnotations;
+
 namespace SFA.DAS.Campaign.Api.Domain.Models;
 
 public class UserData
 {
+    [Key]
     public Guid Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }

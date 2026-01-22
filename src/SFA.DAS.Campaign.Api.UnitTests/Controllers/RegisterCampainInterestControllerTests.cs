@@ -49,7 +49,7 @@ internal class RegisterCampainInterestControllerTests
                   .ReturnsAsync(new UpsertResult<UserDataEntity>(userDataEntity, true));
 
         // act
-        var result = await sut.RegisterInterest(repository.Object, userData, token);
+        var result = await sut.RegisterInterest(repository.Object, userDataEntity, token);
         var createdResult = result as CreatedAtActionResult;
 
         // assert
@@ -75,34 +75,4 @@ internal class RegisterCampainInterestControllerTests
         createdResult.ActionName.Should().Be(nameof(RegisterCampaignInterestController.RegisterInterest));
     }
 
-
-
-
-
-
-
-    //[Test, RecursiveMoqAutoData]
-    //public async Task Then_The_User_Is_Created(
-    //    Guid userId,
-    //    Mock<IUserDataRepository> repository,
-    //    UserDataEntity entity,
-    //    [Greedy] RegisterCampaignInterestController sut,
-    //    CancellationToken token)
-    //{
-    //    // arrange
-    //    request.UserType = UserType.Employer;
-    //    repository
-    //        .Setup(x => x.UpsertOneAsync(It.IsAny<UserDataEntity>(), token))
-    //        .ReturnsAsync(UpsertResult.Create(entity, true));
-
-    //    // act
-    //    var result = await sut.PutOne(repository.Object, userId, request, token);
-    //    var createdResult = result as Created<PutUserResponse>;
-
-    //    // assert
-    //    repository.Verify(x => x.UpsertOneAsync(ItIs.EquivalentTo(request.ToDomain(userId)), token), Times.Once);
-    //    createdResult.Should().NotBeNull();
-    //    createdResult.Value.Should().BeEquivalentTo(entity, options => options.ExcludingMissingMembers());
-    //    createdResult.Location.Should().Be($"/api/user/{entity.Id}");
-    //}
 }
