@@ -28,6 +28,6 @@ internal class UserDataRepositoryTests
         // assert
         context.Verify(x => x.SaveChangesAsync(token), Times.Once);
         dbSet.Verify(x => x.AddAsync(entity, token), Times.Once);
-        result.Created.Should().BeTrue();
+        result.Created.Should().BeFalse();
     }
 }

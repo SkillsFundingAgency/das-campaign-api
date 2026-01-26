@@ -1,6 +1,5 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SFA.DAS.Campaign.Api.Controllers;
@@ -28,18 +27,18 @@ internal class RegisterCampainInterestControllerTests
         IncludeInUR = true
     };
 
-    //private static readonly UserData userDataEntity = new()
-    //{
-    //    FirstName = userData.FirstName,
-    //    LastName = userData.LastName,
-    //    Email = userData.Email,
-    //    UkEmployerSize = userData.UkEmployerSize,
-    //    PrimaryIndustry = userData.PrimaryIndustry,
-    //    PrimaryLocation = userData.PrimaryLocation,
-    //    AppsgovSignUpDate = userData.AppsgovSignUpDate,
-    //    PersonOrigin = userData.PersonOrigin,
-    //    IncludeInUR = userData.IncludeInUR
-    //};
+    private static readonly UserDataEntity userDataEntity = new()
+    {
+        FirstName = userData.FirstName,
+        LastName = userData.LastName,
+        Email = userData.Email,
+        UkEmployerSize = userData.UkEmployerSize,
+        PrimaryIndustry = userData.PrimaryIndustry,
+        PrimaryLocation = userData.PrimaryLocation,
+        AppsgovSignUpDate = userData.AppsgovSignUpDate,
+        PersonOrigin = userData.PersonOrigin,
+        IncludeInUR = userData.IncludeInUR
+    };
 
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_User_Is_Created(Mock<IUserDataRepository> repository, [Greedy] RegisterCampaignInterestController sut, CancellationToken token)
@@ -49,7 +48,7 @@ internal class RegisterCampainInterestControllerTests
                   .ReturnsAsync(new UpsertResult<UserData>(userData, true));
 
         // act
-        var result = await sut.RegisterInterest(repository.Object, userData, token);
+        var result = await sut.RegisterInterest(repository.Object, userDataEntity, token);
         var createdResult = result as CreatedAtActionResult;
 
         // assert
