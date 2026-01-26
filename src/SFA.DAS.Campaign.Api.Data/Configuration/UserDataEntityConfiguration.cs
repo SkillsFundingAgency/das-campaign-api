@@ -1,19 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SFA.DAS.Campaign.Api.Domain.Entities;
+using SFA.DAS.Campaign.Api.Domain.Models;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.Campaign.Api.Data.Configuration;
 
 [ExcludeFromCodeCoverage]
-internal class UserDataEntityConfiguration : IEntityTypeConfiguration<UserDataEntity>
+internal class UserDataEntityConfiguration : IEntityTypeConfiguration<UserData>
 {
-    public void Configure(EntityTypeBuilder<UserDataEntity> builder)
+    public void Configure(EntityTypeBuilder<UserData> builder)
     {
         builder.ToTable("UserData");
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("int");
         builder.Property(x => x.FirstName).HasColumnName("FirstName").HasColumnType("varchar(250)").IsRequired();
         builder.Property(x => x.LastName).HasColumnName("LastName").HasColumnType("varchar(250)").IsRequired();
         builder.Property(x => x.Email).HasColumnName("Email").HasColumnType("varchar(250)").IsRequired();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Campaign.Api.Data.Repositories;
+using SFA.DAS.Campaign.Api.Domain.Entities;
 using SFA.DAS.Campaign.Api.Domain.Models;
 using System.Net;
 
@@ -11,20 +12,33 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
 {
     // POST: api/registercampaigninterest/registerinterest
     [HttpPost("registerinterest")]
-    [ProducesResponseType(typeof(UserData), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(UserDataEntity), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(UserDataEntity), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> RegisterInterest([FromServices] IUserDataRepository repository, [FromBody] UserData userData, CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterInterest([FromServices] IUserDataRepository repository, [FromBody] UserDataEntity userDataEntity, CancellationToken cancellationToken)
     {
         try
         {
             logger.LogInformation("Register Campaign Interest API: Received request to add user details to campaign");
 
-            if (userData == null)
+            if (userDataEntity == null)
             {
                 logger.LogWarning("User details for registering interest is empty");
                 return BadRequest(new { message = "User details for registering interest cannot be empty" });
             }
+
+            UserData userData = new()
+            {
+                FirstName = userDataEntity.FirstName,
+                LastName = userDataEntity.LastName,
+                Email = userDataEntity.Email,
+                UkEmployerSize = userDataEntity.UkEmployerSize,
+                PrimaryIndustry = userDataEntity.PrimaryIndustry,
+                PrimaryLocation = userDataEntity.PrimaryLocation,
+                AppsgovSignUpDate = userDataEntity.AppsgovSignUpDate,
+                PersonOrigin = userDataEntity.PersonOrigin,
+                IncludeInUR = userDataEntity.IncludeInUR
+            };
 
             var result = await repository.AddNewCampaignInterestAsync(userData, cancellationToken);
 

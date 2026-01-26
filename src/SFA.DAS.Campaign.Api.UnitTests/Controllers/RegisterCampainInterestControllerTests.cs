@@ -28,34 +28,34 @@ internal class RegisterCampainInterestControllerTests
         IncludeInUR = true
     };
 
-    private static readonly UserDataEntity userDataEntity = new()
-    {
-        FirstName = userData.FirstName,
-        LastName = userData.LastName,
-        Email = userData.Email,
-        UkEmployerSize = userData.UkEmployerSize,
-        PrimaryIndustry = userData.PrimaryIndustry,
-        PrimaryLocation = userData.PrimaryLocation,
-        AppsgovSignUpDate = userData.AppsgovSignUpDate,
-        PersonOrigin = userData.PersonOrigin,
-        IncludeInUR = userData.IncludeInUR
-    };
+    //private static readonly UserData userDataEntity = new()
+    //{
+    //    FirstName = userData.FirstName,
+    //    LastName = userData.LastName,
+    //    Email = userData.Email,
+    //    UkEmployerSize = userData.UkEmployerSize,
+    //    PrimaryIndustry = userData.PrimaryIndustry,
+    //    PrimaryLocation = userData.PrimaryLocation,
+    //    AppsgovSignUpDate = userData.AppsgovSignUpDate,
+    //    PersonOrigin = userData.PersonOrigin,
+    //    IncludeInUR = userData.IncludeInUR
+    //};
 
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_User_Is_Created(Mock<IUserDataRepository> repository, [Greedy] RegisterCampaignInterestController sut, CancellationToken token)
     {
         // arrange
-        repository.Setup(x => x.AddNewCampaignInterestAsync(It.IsAny<UserDataEntity>(), token))
-                  .ReturnsAsync(new UpsertResult<UserDataEntity>(userDataEntity, true));
+        repository.Setup(x => x.AddNewCampaignInterestAsync(It.IsAny<UserData>(), token))
+                  .ReturnsAsync(new UpsertResult<UserData>(userData, true));
 
         // act
-        var result = await sut.RegisterInterest(repository.Object, userDataEntity, token);
+        var result = await sut.RegisterInterest(repository.Object, userData, token);
         var createdResult = result as CreatedAtActionResult;
 
         // assert
         repository.Verify(
             x => x.AddNewCampaignInterestAsync(
-                It.Is<UserDataEntity>(e =>
+                It.Is<UserData>(e =>
                     e.FirstName == userData.FirstName &&
                     e.LastName == userData.LastName &&
                     e.Email == userData.Email &&

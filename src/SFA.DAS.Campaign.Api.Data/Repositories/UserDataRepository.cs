@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SFA.DAS.Campaign.Api.Domain.Entities;
 using SFA.DAS.Campaign.Api.Data.Models;
 using SFA.DAS.Campaign.Api.Domain.Models;
 
@@ -22,7 +21,18 @@ public class UserDataRepository(ICampaignDataContext dataContext) : IUserDataRep
         {
             await dataContext.UserData.AddAsync(userData, cancellationToken);
             await dataContext.SaveChangesAsync(cancellationToken);
-            return UpsertResult.Create(userData, true);
+
+            var createdUserData = await dataContext.UserData
+                .FirstOrDefaultAsync(x =>
+                    x.Email == userData.Email &&
+                    x.AppsgovSignUpDate == userData.AppsgovSignUpDate, cancellationToken);
+
+            if (createdUserData == null)
+            {
+                return UpsertResult.Create(userData, false);
+            }
+
+            return UpsertResult.Create(createdUserData, true);
         }
         catch
         {
