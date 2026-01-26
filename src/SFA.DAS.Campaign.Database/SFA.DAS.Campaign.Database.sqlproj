@@ -64,6 +64,7 @@
     <Build Include="dbo\Tables\UserData.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Snapshots\SFA.DAS.Campaign.Database_20260105_13-25-20.dacpac" />
+    <None Include="Snapshots\SFA.DAS.Campaign.Database_v1.0_20260105_13-25-20.dacpac" />
+    <None Include="Snapshots\SFA.DAS.Campaign.Database_v2.0_20260126_12-17-36.dacpac" />
   </ItemGroup>
 </Project>
