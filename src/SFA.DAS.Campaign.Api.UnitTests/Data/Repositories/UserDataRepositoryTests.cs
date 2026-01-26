@@ -3,7 +3,7 @@ using FluentAssertions;
 using Moq;
 using SFA.DAS.Campaign.Api.Data;
 using SFA.DAS.Campaign.Api.Data.Repositories;
-using SFA.DAS.Campaign.Api.Domain.Entities;
+using SFA.DAS.Campaign.Api.Domain.Models;
 using SFA.DAS.Campaign.Api.UnitTests.Data.DatabaseMock;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -13,14 +13,14 @@ internal class UserDataRepositoryTests
 {
     [Test, RecursiveMoqAutoData]
     public async Task AddNewCampaignInterestAsync_Inserts_New_Entity(
-        UserDataEntity entity,
+        UserData entity,
         [Frozen] Mock<ICampaignDataContext> context,
         [Greedy] UserDataRepository sut,
         CancellationToken token)
     {
         // arrange
-        var dbSet = new List<UserDataEntity>().BuildDbSetMock();
-        context.Setup(x => x.UserDataEntities).Returns(dbSet.Object);
+        var dbSet = new List<UserData>().BuildDbSetMock();
+        context.Setup(x => x.UserData).Returns(dbSet.Object);
 
         // act
         var result = await sut.AddNewCampaignInterestAsync(entity, token);

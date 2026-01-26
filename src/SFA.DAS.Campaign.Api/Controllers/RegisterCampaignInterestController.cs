@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Campaign.Api.Data.Repositories;
-using SFA.DAS.Campaign.Api.Domain.Entities;
+using SFA.DAS.Campaign.Api.Domain.Models;
 using System.Net;
 
 namespace SFA.DAS.Campaign.Api.Controllers;
@@ -11,10 +11,10 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
 {
     // POST: api/registercampaigninterest/registerinterest
     [HttpPost("registerinterest")]
-    [ProducesResponseType(typeof(UserDataEntity), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(UserData), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> RegisterInterest([FromServices] IUserDataRepository repository, [FromBody] UserDataEntity userData, CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterInterest([FromServices] IUserDataRepository repository, [FromBody] UserData userData, CancellationToken cancellationToken)
     {
         try
         {

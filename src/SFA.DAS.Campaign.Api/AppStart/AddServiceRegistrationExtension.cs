@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.Campaign.Api.Data;
 using SFA.DAS.Campaign.Api.Data.Repositories;
@@ -24,13 +25,18 @@ public static class AddServiceRegistrationExtension
     {
         services.AddHttpContextAccessor();
 
-        if (string.Equals(environmentName, "DEV", StringComparison.CurrentCultureIgnoreCase))
+        if (!string.IsNullOrEmpty(environmentName) && environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
         {
-            services.AddDbContext<CampaignDataContext>(options => options.UseInMemoryDatabase("SFA.DAS.Campaign.Api"), ServiceLifetime.Transient);
+            services.AddDbContext<CampaignDataContext>(options => options.UseInMemoryDatabase("SFA.DAS.Campaign.Api_1.0"), ServiceLifetime.Transient);
+        }
+        else if (!string.IsNullOrEmpty(environmentName) && environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
+        {
+            services.AddDbContext<CampaignDataContext>(options => options.UseSqlServer(config.SqlConnectionString), ServiceLifetime.Transient);
         }
         else
         {
-            services.AddDbContext<CampaignDataContext>(options => options.UseSqlServer(config.SqlConnectionString), ServiceLifetime.Transient);
+            services.AddSingleton(new AzureServiceTokenProvider());
+            services.AddDbContext<CampaignDataContext>(ServiceLifetime.Transient);
         }
 
         services.AddScoped<ICampaignDataContext, CampaignDataContext>(provider => provider.GetRequiredService<CampaignDataContext>());

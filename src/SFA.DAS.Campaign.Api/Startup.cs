@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -61,8 +60,7 @@ internal class Startup
     {
         if (!IsEnvironmentLocalOrDev)
         {
-            var azureAdConfiguration = Configuration.GetSection("AzureAd")
-                                                    .Get<AzureActiveDirectoryConfiguration>();
+            var azureAdConfiguration = Configuration.GetSection("AzureAd").Get<AzureActiveDirectoryConfiguration>();
 
             var policies = new Dictionary<string, string>
             {

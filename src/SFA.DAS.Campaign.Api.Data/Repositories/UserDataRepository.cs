@@ -1,25 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.Campaign.Api.Domain.Entities;
 using SFA.DAS.Campaign.Api.Data.Models;
+using SFA.DAS.Campaign.Api.Domain.Models;
 
 namespace SFA.DAS.Campaign.Api.Data.Repositories;
 
 public interface IUserDataRepository
 {
-    Task<UserDataEntity?> GetLatestForEmailAsync(string emailAddress, CancellationToken cancellationToken);
+    Task<UserData?> GetLatestForEmailAsync(string emailAddress, CancellationToken cancellationToken);
 
-    Task<List<UserDataEntity>> GetAllForEmailAsync(string emailAddress, CancellationToken cancellationToken);
+    Task<List<UserData>> GetAllForEmailAsync(string emailAddress, CancellationToken cancellationToken);
 
-    Task<UpsertResult<UserDataEntity>> AddNewCampaignInterestAsync(UserDataEntity userData, CancellationToken cancellationToken);
+    Task<UpsertResult<UserData>> AddNewCampaignInterestAsync(UserData userData, CancellationToken cancellationToken);
 }
 
 public class UserDataRepository(ICampaignDataContext dataContext) : IUserDataRepository
 {
-    public async Task<UpsertResult<UserDataEntity>> AddNewCampaignInterestAsync(UserDataEntity userData, CancellationToken cancellationToken)
+    public async Task<UpsertResult<UserData>> AddNewCampaignInterestAsync(UserData userData, CancellationToken cancellationToken)
     {
         try
         {
-            await dataContext.UserDataEntities.AddAsync(userData, cancellationToken);
+            await dataContext.UserData.AddAsync(userData, cancellationToken);
             await dataContext.SaveChangesAsync(cancellationToken);
             return UpsertResult.Create(userData, true);
         }
@@ -30,14 +31,14 @@ public class UserDataRepository(ICampaignDataContext dataContext) : IUserDataRep
     }
 
 
-    public async Task<List<UserDataEntity>> GetAllForEmailAsync(string emailAddress, CancellationToken cancellationToken)
+    public async Task<List<UserData>> GetAllForEmailAsync(string emailAddress, CancellationToken cancellationToken)
     {
-        return await dataContext.UserDataEntities.Where(x => x.Email == emailAddress).ToListAsync(cancellationToken);
+        return await dataContext.UserData.Where(x => x.Email == emailAddress).ToListAsync(cancellationToken);
     }
 
-    public async Task<UserDataEntity?> GetLatestForEmailAsync(string emailAddress, CancellationToken cancellationToken)
+    public async Task<UserData?> GetLatestForEmailAsync(string emailAddress, CancellationToken cancellationToken)
     {
-        return await dataContext.UserDataEntities
+        return await dataContext.UserData
                         .Where(x => x.Email == emailAddress)
                         .OrderByDescending(p => p.AppsgovSignUpDate)
                         .FirstOrDefaultAsync(cancellationToken);

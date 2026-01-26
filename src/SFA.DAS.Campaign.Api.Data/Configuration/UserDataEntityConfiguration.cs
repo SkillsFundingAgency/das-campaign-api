@@ -13,7 +13,7 @@ internal class UserDataEntityConfiguration : IEntityTypeConfiguration<UserDataEn
         builder.ToTable("UserData");
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
+        builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("int");
         builder.Property(x => x.FirstName).HasColumnName("FirstName").HasColumnType("varchar(250)").IsRequired();
         builder.Property(x => x.LastName).HasColumnName("LastName").HasColumnType("varchar(250)").IsRequired();
         builder.Property(x => x.Email).HasColumnName("Email").HasColumnType("varchar(250)").IsRequired();

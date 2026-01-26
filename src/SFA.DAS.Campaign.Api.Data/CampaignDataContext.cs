@@ -2,9 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Options;
-using SFA.DAS.Campaign.Api.Data.Configuration;
 using SFA.DAS.Campaign.Api.Domain.Configuration;
-using SFA.DAS.Campaign.Api.Domain.Entities;
+using SFA.DAS.Campaign.Api.Domain.Models;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -12,7 +11,7 @@ namespace SFA.DAS.Campaign.Api.Data;
 
 public interface ICampaignDataContext
 {
-    DbSet<UserDataEntity> UserDataEntities { get; }
+    DbSet<UserData> UserData { get; }
     DatabaseFacade Database { get; }
     Task Ping(CancellationToken cancellationToken);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
@@ -22,7 +21,7 @@ public interface ICampaignDataContext
 [ExcludeFromCodeCoverage]
 public class CampaignDataContext : DbContext, ICampaignDataContext
 {
-    public DbSet<UserDataEntity> UserDataEntities { get; set; }
+    public DbSet<UserData> UserData { get; set; }
 
     private readonly CampaignConfiguration? _configuration;
     public CampaignDataContext() { }
@@ -35,9 +34,7 @@ public class CampaignDataContext : DbContext, ICampaignDataContext
 
     public async Task Ping(CancellationToken cancellationToken)
     {
-        await Database
-            .ExecuteSqlRawAsync("SELECT 1;", cancellationToken)
-            .ConfigureAwait(false);
+        await Database.ExecuteSqlRawAsync("SELECT 1;", cancellationToken).ConfigureAwait(false);
     }
 
     public void SetValues<TEntity>(TEntity to, TEntity from) where TEntity : class
@@ -56,18 +53,11 @@ public class CampaignDataContext : DbContext, ICampaignDataContext
         }
 
         var connection = new SqlConnection { ConnectionString = _configuration!.SqlConnectionString, };
-        optionsBuilder.UseSqlServer(connection, options => 
+        optionsBuilder.UseSqlServer(connection, options =>
                         options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(20), null)).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
         // Note: useful to keep here
-        //optionsBuilder.LogTo(message => Debug.WriteLine(message));
+        optionsBuilder.LogTo(message => Debug.WriteLine(message));
         optionsBuilder.EnableDetailedErrors();
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfiguration(new UserDataEntityConfiguration());
-
-        base.OnModelCreating(modelBuilder);
     }
 }
