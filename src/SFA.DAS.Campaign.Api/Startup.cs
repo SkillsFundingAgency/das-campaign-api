@@ -37,7 +37,6 @@ internal class Startup
             .AddConfiguration(configuration)
             .AddAzureTableStorage(options =>
                 {
-                    options.ConfigurationNameIncludesVersionNumber = true;
                     options.ConfigurationKeys = configuration["ConfigNames"]!.Split(",");
                     options.EnvironmentName = _environmentName;
                     options.PreFixConfigurationKeys = false;
@@ -53,8 +52,7 @@ internal class Startup
 
     private bool IsEnvironmentLocalOrDev =>
         _environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-        || _environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)
-        || _environmentName.Equals("TEST", StringComparison.CurrentCultureIgnoreCase);
+        || _environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
 
     public void ConfigureServices(IServiceCollection services)
     {
