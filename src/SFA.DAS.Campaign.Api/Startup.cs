@@ -73,7 +73,7 @@ internal class Startup
 
         services.Configure<CampaignConfiguration>(Configuration.GetSection(nameof(CampaignConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<CampaignConfiguration>>()!.Value);
-        var candidateAccountConfiguration = Configuration.GetSection(nameof(CampaignConfiguration)).Get<CampaignConfiguration>();
+        var campaignConfiguration = Configuration.GetSection(nameof(CampaignConfiguration)).Get<CampaignConfiguration>();
 
         services.AddMvc(o =>
             {
@@ -92,7 +92,7 @@ internal class Startup
 
         services.RegisterDasEncodingService(Configuration);
         services.AddApplicationDependencies(Configuration);
-        services.AddDatabaseRegistration(candidateAccountConfiguration!, Configuration["EnvironmentName"]);
+        AddDatabaseExtension.AddDatabaseRegistration(services, campaignConfiguration!, Configuration["EnvironmentName"]!);
         services.AddOpenTelemetryRegistration(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]!);
         services.ConfigureHealthChecks();
         services.AddEndpointsApiExplorer();

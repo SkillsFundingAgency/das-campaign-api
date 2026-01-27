@@ -19,7 +19,7 @@ internal class RegisterCampainInterestControllerTests
         FirstName = "John",
         LastName = "Doe",
         Email = "John.Doe@TestEmail.com",
-        UkEmployerSize = 10,
+        UkEmployerSize = "10",
         PrimaryIndustry = "IT",
         PrimaryLocation = "London",
         AppsgovSignUpDate = DateTime.UtcNow,
