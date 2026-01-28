@@ -64,6 +64,7 @@ stages:
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
       Environment: AT
       SolutionBaseName: $(SolutionBaseName)
       ServiceConnection: SFA-DAS-DevTest-ARM
@@ -78,6 +79,7 @@ stages:
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
       Environment: TEST
       SolutionBaseName: $(SolutionBaseName)
       ServiceConnection: SFA-DAS-DevTest-ARM
@@ -92,6 +94,7 @@ stages:
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
       Environment: TEST2
       SolutionBaseName: $(SolutionBaseName)
       ServiceConnection: SFA-DAS-DevTest-ARM
@@ -106,6 +109,7 @@ stages:
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
       Environment: PP
       SolutionBaseName: $(SolutionBaseName)
       ServiceConnection: SFA-DIG-PreProd-ARM
@@ -120,6 +124,7 @@ stages:
 #   jobs:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
+#       AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 #       Environment: PROD
 #       SolutionBaseName: $(SolutionBaseName)
 #       ServiceConnection: SFA-DIG-Prod-ARM
@@ -134,6 +139,7 @@ stages:
 #   jobs:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
+#       AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 #       Environment: MO
 #       SolutionBaseName: $(SolutionBaseName)
 #       ServiceConnection: SFA-ASM-ModelOffice-ARM
@@ -148,6 +154,7 @@ stages:
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
       Environment: DEMO
       SolutionBaseName: $(SolutionBaseName)
       ServiceConnection: SFA-DAS-DevTest-ARM
