@@ -8,6 +8,7 @@ using SFA.DAS.Campaign.Api.Data.Repositories;
 using SFA.DAS.Campaign.Api.Domain.Entities;
 using SFA.DAS.Campaign.Api.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
+using System.Net;
 
 namespace SFA.DAS.Campaign.Api.UnitTests.Controllers;
 
@@ -72,4 +73,30 @@ public class RegisterCampainInterestControllerTests
         createdResult.ActionName.Should().Be(nameof(RegisterCampaignInterestController.RegisterInterest));
     }
 
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_If_UserData_Is_Null_BadRequest_Is_Returned([Greedy] RegisterCampaignInterestController sut, Mock<IUserDataRepository> repository, CancellationToken token)
+    {
+        // act
+        var result = await sut.RegisterInterest(repository.Object, null!, token);
+        var badRequestResult = result as BadRequestObjectResult;
+
+        // assert
+        badRequestResult.Should().NotBeNull();
+        badRequestResult!.Value.Should().BeEquivalentTo(new { message = "User details for registering interest cannot be empty" });
+    }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_If_Exception_Is_Thrown_InternalServerError_Is_Returned(Mock<IUserDataRepository> repository, [Greedy] RegisterCampaignInterestController sut, CancellationToken token)
+    {
+        // arrange
+        repository.Setup(x => x.AddNewCampaignInterestAsync(It.IsAny<UserData>(), token)).ThrowsAsync(new Exception());
+
+        // act
+        var result = await sut.RegisterInterest(repository.Object, userDataEntity, token);
+
+        // assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<StatusCodeResult>();
+        result.As<StatusCodeResult>().StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    }
 }

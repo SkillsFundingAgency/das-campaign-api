@@ -1,9 +1,11 @@
 #nullable disable 
 
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.Campaign.Api.Domain.Entities;
 
+[ExcludeFromCodeCoverage]
 public class UserDataEntity
 {
     public string FirstName { get; set; } 

@@ -23,10 +23,11 @@ internal class UserDataRepositoryTests
         context.Setup(x => x.UserData).Returns(dbSet.Object);
 
         // act
-        await sut.AddNewCampaignInterestAsync(entity, token);
+        var result = await sut.AddNewCampaignInterestAsync(entity, token);
 
         // assert
         context.Verify(x => x.SaveChangesAsync(token), Times.Once);
         dbSet.Verify(x => x.AddAsync(entity, token), Times.Once);
+        result.Entity.Should().BeEquivalentTo(entity);
     }
 }
