@@ -1,5 +1,7 @@
 <Solution>
-  <Folder Name="/Tests/" />
+  <Folder Name="/Tests/">
+    <Project Path="SFA.DAS.Campaign.Api.UnitTests/SFA.DAS.Campaign.Api.UnitTests.csproj" />
+  </Folder>
   <Project Path="SFA.DAS.Campaign.Api.Data/SFA.DAS.Campaign.Api.Data.csproj" Id="66410ef7-a3de-49e5-b6b3-c5b037e3ca51" />
   <Project Path="SFA.DAS.Campaign.Api.Domain/SFA.DAS.Campaign.Api.Domain.csproj" Id="ae7e865f-7960-4541-a748-93aa9ff9c7f6" />
   <Project Path="SFA.DAS.Campaign.Api/SFA.DAS.Campaign.Api.csproj">
