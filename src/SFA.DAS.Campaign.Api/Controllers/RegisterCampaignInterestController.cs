@@ -40,14 +40,17 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
                 IncludeInUR = userDataEntity.IncludeInUR
             };
 
+            logger.LogInformation("Register Campaign Interest API: Adding new campaign interest for user with Email: {Email}", userData.Email);
             var result = await repository.AddNewCampaignInterestAsync(userData, cancellationToken);
 
             if (result != null && result.Entity != null)
             {
+                logger.LogInformation("Successfully registered campaign interest for user with Id: {UserId}", result.Entity.Id);
                 return CreatedAtAction(nameof(RegisterInterest), new { id = result.Entity.Id }, result.Entity);
             }
             else
             {
+                logger.LogError("Unable to Register Campaign Interest : An error occurred while processing the request");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
