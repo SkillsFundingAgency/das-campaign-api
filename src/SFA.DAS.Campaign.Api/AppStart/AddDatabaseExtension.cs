@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.Campaign.Api.Data;
 using SFA.DAS.Campaign.Api.Domain.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.Campaign.Api.AppStart;
 
+[ExcludeFromCodeCoverage]
 public static class AddDatabaseExtension
 {
     public static void AddDatabaseRegistration(this IServiceCollection services, CampaignConfiguration config, string environmentName)

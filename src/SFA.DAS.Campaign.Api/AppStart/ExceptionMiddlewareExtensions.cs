@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace SFA.DAS.Campaign.Api.AppStart;
 
+[ExcludeFromCodeCoverage]
 public static class ExceptionMiddlewareExtensions
 {
     public static void ConfigureExceptionHandler(this IApplicationBuilder app, ILogger logger)
