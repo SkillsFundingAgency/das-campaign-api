@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="CampaignDataException.cs" />
     <Compile Remove="IReadRepository.cs" />
     <Compile Remove="IWriteRepository.cs" />
   </ItemGroup>

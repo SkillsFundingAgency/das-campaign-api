@@ -18,6 +18,7 @@ public static class ExceptionMiddlewareExtensions
                 {
                     logger.LogError(contextFeature.Error, $"Unexpected error occurred");
                 }
+                await Task.CompletedTask;
             });
         });
     }
