@@ -1,0 +1,14 @@
+﻿CREATE TABLE dbo.UserData
+(
+	Id					INT IDENTITY (1, 1) PRIMARY KEY,
+	FirstName			VARCHAR(250) NOT NULL,
+	LastName			VARCHAR(250) NOT NULL,
+	Email				VARCHAR(250) NOT NULL,
+	UkEmployerSize		VARCHAR(50) NOT NULL,
+	PrimaryIndustry		VARCHAR(50) NOT NULL,
+	PrimaryLocation		VARCHAR(50) NOT NULL,
+	AppsgovSignUpDate	DATETIME DEFAULT (GETDATE()) NOT NULL,
+	PersonOrigin		VARCHAR(50) NULL,
+	IncludeInUR			BIT NULL
+) ON [PRIMARY]
+GO

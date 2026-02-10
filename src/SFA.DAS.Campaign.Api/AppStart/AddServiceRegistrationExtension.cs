@@ -1,0 +1,60 @@
+﻿using FluentValidation;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.EntityFrameworkCore;
+using SFA.DAS.Campaign.Api.Data;
+using SFA.DAS.Campaign.Api.Data.Repositories;
+using SFA.DAS.Campaign.Api.Domain.Configuration;
+using SFA.DAS.Encoding;
+using System.Diagnostics.CodeAnalysis;
+
+namespace SFA.DAS.Campaign.Api.AppStart;
+
+[ExcludeFromCodeCoverage]
+public static class AddServiceRegistrationExtension
+{
+    public static void AddApplicationDependencies(this IServiceCollection services, IConfiguration configuration)
+    {
+        // validators
+        services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+
+        // repositories
+        services.AddScoped<IUserDataRepository, UserDataRepository>();
+    }
+
+    public static void AddDatabaseRegistration(this IServiceCollection services, CampaignConfiguration config, string? environmentName)
+    {
+        services.AddHttpContextAccessor();
+
+        if (!string.IsNullOrEmpty(environmentName) && environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
+        {
+            services.AddDbContext<CampaignDataContext>(options => options.UseInMemoryDatabase("SFA.DAS.Campaign.Api_1.0"), ServiceLifetime.Transient);
+        }
+        else if (!string.IsNullOrEmpty(environmentName) && environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
+        {
+            services.AddDbContext<CampaignDataContext>(options => options.UseSqlServer(config.SqlConnectionString), ServiceLifetime.Transient);
+        }
+        else
+        {
+            services.AddSingleton(new AzureServiceTokenProvider());
+            services.AddDbContext<CampaignDataContext>(ServiceLifetime.Transient);
+        }
+
+        services.AddScoped<ICampaignDataContext, CampaignDataContext>(provider => provider.GetRequiredService<CampaignDataContext>());
+        services.AddScoped(provider => new Lazy<CampaignDataContext>(provider.GetRequiredService<CampaignDataContext>));
+    }
+
+    public static void ConfigureHealthChecks(this IServiceCollection services)
+    {
+        // health checks
+        services.AddHealthChecks()
+                .AddCheck<DefaultHealthCheck>("default");
+    }
+
+    public static void RegisterDasEncodingService(this IServiceCollection services, IConfiguration configuration)
+    {
+        var dasEncodingConfig = new EncodingConfig { Encodings = [] };
+        configuration.GetSection(nameof(dasEncodingConfig.Encodings)).Bind(dasEncodingConfig.Encodings);
+        services.AddSingleton(dasEncodingConfig);
+        services.AddSingleton<IEncodingService, EncodingService>();
+    }
+}
