@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Primitives;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.Campaign.Api.AppStart;
 
+[ExcludeFromCodeCoverage]
 public class SecurityHeadersMiddleware(RequestDelegate next)
 {
     public async Task InvokeAsync(HttpContext context)

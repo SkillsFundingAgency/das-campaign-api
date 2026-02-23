@@ -28,12 +28,6 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
                 return BadRequest(new { message = "User details for registering interest cannot be empty" });
             }
 
-            if (!ModelState.IsValid)
-            {
-                logger.LogError("Invalid Campaign Interest data...");
-                return BadRequest(ModelState);
-            }
-
             UserData userData = new()
             {
                 FirstName = InputSanitizer.Clean(userDataEntity.FirstName),
