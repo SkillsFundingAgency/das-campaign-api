@@ -26,7 +26,6 @@ internal class Startup
     public Startup(IConfiguration configuration)
     {
         _environmentName = configuration["EnvironmentName"]!;
-
         if (_environmentName == "INTEGRATION")
         {
             Configuration = configuration;
@@ -43,10 +42,11 @@ internal class Startup
                     options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
                 });
 
-#if DEBUG
+        #if DEBUG
         config.AddJsonFile("appsettings.Development.json", true);
         config.AddJsonFile("appsettings.json", true);
-#endif
+        #endif
+
         Configuration = config.Build();
     }
 
@@ -135,7 +135,6 @@ internal class Startup
     {
         if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
         app.UseAuthentication();
-
         app.UseSwagger();
         app.UseSwaggerUI(options =>
             {
@@ -145,6 +144,19 @@ internal class Startup
         app.UseHealthChecks();
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseMiddleware<SecurityHeadersMiddleware>();
+
+        app.Use(async (context, next) =>
+        {
+            context.Response.OnStarting(() =>
+            {
+                context.Response.Headers.Remove("X-AspNet-Version");
+                context.Response.Headers.Remove("X-Powered-By");
+                return Task.CompletedTask;
+            });
+            await next();
+        });
+
         app.UseAuthorization();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }

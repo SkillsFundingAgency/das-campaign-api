@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ganss.Xss;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Campaign.Api.Data.Repositories;
 using SFA.DAS.Campaign.Api.Domain.Entities;
 using SFA.DAS.Campaign.Api.Domain.Models;
@@ -29,14 +30,14 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
 
             UserData userData = new()
             {
-                FirstName = userDataEntity.FirstName,
-                LastName = userDataEntity.LastName,
-                Email = userDataEntity.Email,
-                UkEmployerSize = userDataEntity.UkEmployerSize,
-                PrimaryIndustry = userDataEntity.PrimaryIndustry,
-                PrimaryLocation = userDataEntity.PrimaryLocation,
+                FirstName = InputSanitizer.Clean(userDataEntity.FirstName),
+                LastName = InputSanitizer.Clean(userDataEntity.LastName),
+                Email = InputSanitizer.Clean(userDataEntity.Email),
+                UkEmployerSize = InputSanitizer.Clean(userDataEntity.UkEmployerSize),
+                PrimaryIndustry = InputSanitizer.Clean(userDataEntity.PrimaryIndustry),
+                PrimaryLocation = InputSanitizer.Clean(userDataEntity.PrimaryLocation),
                 AppsgovSignUpDate = userDataEntity.AppsgovSignUpDate,
-                PersonOrigin = userDataEntity.PersonOrigin,
+                PersonOrigin = InputSanitizer.Clean(userDataEntity.PersonOrigin),
                 IncludeInUR = userDataEntity.IncludeInUR
             };
 
@@ -62,3 +63,9 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
     }
 }
 
+public static class InputSanitizer
+{
+    private static readonly HtmlSanitizer _sanitizer = new();
+
+    public static string Clean(string input) => string.IsNullOrWhiteSpace(input) ? input : _sanitizer.Sanitize(input.Trim());
+}
