@@ -9,7 +9,6 @@ public class SecurityHeadersMiddleware(RequestDelegate next)
     public async Task InvokeAsync(HttpContext context)
     {
         context.Response.Headers.Append("x-frame-options", new StringValues("DENY"));
-        context.Response.Headers.Append("x-content-type-options", new StringValues("nosniff"));
         context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
         context.Response.Headers.Append("x-xss-protection", new StringValues("0"));
         context.Response.Headers.Append("strict-transport-security", new StringValues("max-age=31536000"));
