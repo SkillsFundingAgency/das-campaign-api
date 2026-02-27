@@ -1,5 +1,4 @@
-﻿using Ganss.Xss;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Campaign.Api.Data.Repositories;
 using SFA.DAS.Campaign.Api.Domain.Entities;
 using SFA.DAS.Campaign.Api.Domain.Models;
@@ -28,16 +27,22 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
                 return BadRequest(new { message = "User details for registering interest cannot be empty" });
             }
 
+            if (!ModelState.IsValid)
+            {
+                logger.LogError("Invalid data received");
+                return BadRequest(ModelState);
+            }
+
             UserData userData = new()
             {
-                FirstName = InputSanitizer.Clean(userDataEntity.FirstName),
-                LastName = InputSanitizer.Clean(userDataEntity.LastName),
-                Email = InputSanitizer.Clean(userDataEntity.Email),
-                UkEmployerSize = InputSanitizer.Clean(userDataEntity.UkEmployerSize),
-                PrimaryIndustry = InputSanitizer.Clean(userDataEntity.PrimaryIndustry),
-                PrimaryLocation = InputSanitizer.Clean(userDataEntity.PrimaryLocation),
+                FirstName = userDataEntity.FirstName,
+                LastName = userDataEntity.LastName,
+                Email = userDataEntity.Email,
+                UkEmployerSize = userDataEntity.UkEmployerSize,
+                PrimaryIndustry = userDataEntity.PrimaryIndustry,
+                PrimaryLocation = userDataEntity.PrimaryLocation,
                 AppsgovSignUpDate = userDataEntity.AppsgovSignUpDate,
-                PersonOrigin = InputSanitizer.Clean(userDataEntity.PersonOrigin),
+                PersonOrigin = userDataEntity.PersonOrigin,
                 IncludeInUR = userDataEntity.IncludeInUR
             };
 
@@ -61,11 +66,4 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
     }
-}
-
-public static class InputSanitizer
-{
-    private static readonly HtmlSanitizer _sanitizer = new();
-
-    public static string Clean(string input) => string.IsNullOrWhiteSpace(input) ? input : _sanitizer.Sanitize(input.Trim());
 }
