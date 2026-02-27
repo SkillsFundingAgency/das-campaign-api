@@ -118,4 +118,21 @@ public class RegisterCampaignInterestControllerTests
         var objectResult = result as StatusCodeResult;
         objectResult!.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
     }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_If_ModelState_Is_Invalid_BadRequest_Is_Returned(Mock<IUserDataRepository> repository, [Greedy] RegisterCampaignInterestController sut, CancellationToken token)
+    {
+        // arrange
+        sut.ModelState.AddModelError("Email", "Invalid Email address.");
+
+        // act
+        var result = await sut.RegisterInterest(repository.Object, userDataEntity, token);
+        var badRequestResult = result as BadRequestObjectResult;
+
+        // assert
+        badRequestResult.Should().NotBeNull();
+        badRequestResult!.Value.Should().BeOfType<SerializableError>();
+        var errors = badRequestResult.Value as SerializableError;
+        errors!.Should().ContainKey("Email");
+    }
 }
