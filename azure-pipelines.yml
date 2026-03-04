@@ -121,6 +121,7 @@ stages:
   variables:
   - group: PROD Management Resources
   - group: PROD Shared Resources
+  - group: PROD das-campaign-api
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
