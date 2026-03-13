@@ -1,0 +1,21 @@
+﻿CREATE TABLE dbo.Campaigns
+(
+	Id					BIGINT IDENTITY (1, 1) PRIMARY KEY,
+	ExternalId			INT NOT NULL,
+	[Name]				VARCHAR(MAX) NOT NULL,
+	[Type]				VARCHAR(255) NOT NULL,
+	CreatedBy			VARCHAR(255) NOT NULL,
+	CreatedOn			DATETIME2 NOT NULL,
+	ModifiedBy			VARCHAR(255) NOT NULL,
+	ModifiedOn			DATETIME2 NOT NULL,
+	FirstSendDate		DATETIME2 NOT NULL,
+	LastSendDate		DATETIME2 NOT NULL,
+	FromEmailAddress	VARCHAR(255) NOT NULL,
+	FromName			VARCHAR(255) NOT NULL,
+	ReplyEmailAddress	VARCHAR(255) NOT NULL,
+	[Subject]			VARCHAR(MAX) NOT NULL,
+	SubStatus			VARCHAR(255) NOT NULL,
+	ContactCount		INT NOT NULL,
+	Account				VARCHAR(255) NOT NULL
+) ON [PRIMARY]
+GO
