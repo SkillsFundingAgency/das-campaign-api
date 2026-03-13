@@ -1,9 +1,10 @@
 ﻿CREATE TABLE dbo.CampaignImportMetadata
 (
-	Id					INT IDENTITY (1, 1) PRIMARY KEY,
-	CampaignId			INT NOT NULL,
+	Id					BIGINT IDENTITY (1, 1) PRIMARY KEY,
+	CampaignId			BIGINT NOT NULL,
 	IsImportComplete	BIT NOT NULL,
 	ImportStartDate		DATETIME2 NOT NULL,
-	ImportEndDate		DATETIME2 NOT NULL
+	ImportEndDate		DATETIME2 NOT NULL,
+	CONSTRAINT FK_CampaignImportMetadata_Campaigns FOREIGN KEY ( CampaignId ) REFERENCES dbo.Campaigns ( Id )
 ) ON [PRIMARY]
 GO

@@ -1,8 +1,8 @@
 ﻿CREATE TABLE dbo.ClickedLinks
 (
-	Id					INT IDENTITY (1, 1) PRIMARY KEY,
+	Id					BIGINT IDENTITY (1, 1) PRIMARY KEY,
 	ExternalId			INT NOT NULL,
-	CampaignId			INT NOT NULL,
+	CampaignId			BIGINT NOT NULL,
 	ContactEmail		VARCHAR(255) NOT NULL,
 	ClickedDate			DATETIME2 NOT NULL,
 	FriendlyUrlName		VARCHAR(255) NOT NULL,
@@ -17,6 +17,7 @@
 	OsFamily			VARCHAR(255) NOT NULL,
 	IpAddress			VARCHAR(15) NOT NULL,
 	ClientType			VARCHAR(255) NOT NULL,
-	ClientFamily		VARCHAR(255) NOT NULL
+	ClientFamily		VARCHAR(255) NOT NULL,
+	CONSTRAINT FK_ClickedLinks_Campaigns FOREIGN KEY ( CampaignId ) REFERENCES dbo.Campaigns ( Id )
 ) ON [PRIMARY]
 GO
