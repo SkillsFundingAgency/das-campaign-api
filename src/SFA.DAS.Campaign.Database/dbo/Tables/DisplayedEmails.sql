@@ -6,15 +6,15 @@
 	ContactEmail		VARCHAR(255) NOT NULL,
 	DisplayedDate		DATETIME2 NOT NULL,
 	[Format]			VARCHAR(255) NOT NULL,
-	TimeDisplayed		INT NOT NULL,
+	TimeDisplayed		INT,
 	IsSuspectedBot		BIT NOT NULL,
-	Device				VARCHAR(255) NOT NULL,
-	ClientName			VARCHAR(255) NOT NULL,
-	Os					VARCHAR(255) NOT NULL,
-	OsFamily			VARCHAR(255) NOT NULL,
-	IpAddress			VARCHAR(15) NOT NULL,
-	ClientType			VARCHAR(255) NOT NULL,
-	ClientFamily		VARCHAR(255) NOT NULL,
+	Device				VARCHAR(255),
+	ClientName			VARCHAR(255),
+	Os					VARCHAR(255),
+	OsFamily			VARCHAR(255),
+	IpAddress			VARCHAR(15),
+	ClientType			VARCHAR(255),
+	ClientFamily		VARCHAR(255),
 	CONSTRAINT FK_DisplayedEmails_Campaigns FOREIGN KEY ( CampaignId ) REFERENCES dbo.Campaigns ( Id )
 ) ON [PRIMARY]
 GO
