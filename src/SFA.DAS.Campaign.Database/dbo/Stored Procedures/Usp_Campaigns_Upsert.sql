@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE Usp_Campaign_Upsert
+﻿CREATE PROCEDURE Usp_Campaigns_Upsert
 (
     @CampaignId         BIGINT,
     @ExternalId         INT = NULL,

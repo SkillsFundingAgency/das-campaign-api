@@ -2,7 +2,7 @@
 (
 	Id					BIGINT IDENTITY (1, 1) PRIMARY KEY,
 	ExternalId			INT,
-	CampaignId			BIGINT,
+	CampaignId			BIGINT NOT NULL,
 	ContactEmail		VARCHAR(255),
 	ClickedDate			DATETIME2,
 	FriendlyUrlName		VARCHAR(255),
