@@ -1,22 +1,22 @@
 ﻿CREATE PROCEDURE Usp_Campaign_Upsert
 (
     @CampaignId         BIGINT,
-    @ExternalId         INT,
-    @Name               VARCHAR(MAX),
+    @ExternalId         INT = NULL,
+    @Name               VARCHAR(MAX) = NULL,
     @Type               VARCHAR(255) = NULL,
-    @CreatedBy          VARCHAR(255),
-    @CreatedOn          DATETIME2(7),
+    @CreatedBy          VARCHAR(255) = NULL,
+    @CreatedOn          DATETIME2(7) = NULL,
     @ModifiedBy         VARCHAR(255) = NULL,
     @ModifiedOn         DATETIME2(7) = NULL,
-    @FirstSendDate      DATETIME2(7),
+    @FirstSendDate      DATETIME2(7) = NULL,
     @LastSendDate       DATETIME2(7) = NULL,
-    @FromEmailAddress   VARCHAR(255),
-    @FromName           VARCHAR(255),
-    @ReplyEmailAddress  VARCHAR(255),
-    @Subject            VARCHAR(MAX),
-    @SubStatus          VARCHAR(255),
-    @ContactCount       INT,
-    @Account            VARCHAR(255)
+    @FromEmailAddress   VARCHAR(255) = NULL,
+    @FromName           VARCHAR(255) = NULL,
+    @ReplyEmailAddress  VARCHAR(255) = NULL,
+    @Subject            VARCHAR(MAX) = NULL,
+    @SubStatus          VARCHAR(255) = NULL,
+    @ContactCount       INT = NULL,
+    @Account            VARCHAR(255) = NULL
 )
 AS
 BEGIN

@@ -1,12 +1,12 @@
 ﻿CREATE TABLE dbo.UnsubscribedContacts
 (
 	Id					BIGINT IDENTITY (1, 1) PRIMARY KEY,
-	ExternalId			INT NOT NULL,
-	CampaignId			BIGINT NOT NULL,
-	ContactEmail		VARCHAR(255) NOT NULL,
-	UnsubscribedDate	DATETIME2 NOT NULL,
-	IsGlobalUnscribe	BIT NOT NULL,
-	IsComplaint			BIT NOT NULL,
+	ExternalId			INT,
+	CampaignId			BIGINT,
+	ContactEmail		VARCHAR(255),
+	UnsubscribedDate	DATETIME2,
+	IsGlobalUnscribe	BIT,
+	IsComplaint			BIT,
 	CONSTRAINT FK_UnsubscribedContacts_Campaigns FOREIGN KEY ( CampaignId ) REFERENCES dbo.Campaigns ( Id )
 ) ON [PRIMARY]
 GO

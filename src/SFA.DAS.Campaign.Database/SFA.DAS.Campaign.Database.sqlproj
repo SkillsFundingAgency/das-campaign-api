@@ -71,6 +71,6 @@
     <Build Include="dbo\Stored Procedures\Usp_CampaignImportMetadata_Upsert.sql" />
     <Build Include="dbo\Stored Procedures\Usp_CampaignImportMetadata_Get.sql" />
     <Build Include="dbo\Stored Procedures\Usp_Campaigns_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Usp_Campaign_Upsert.sql" />
+    <Build Include="dbo\Stored Procedures\Usp_Campaigns_Upsert.sql" />
   </ItemGroup>
 </Project>
