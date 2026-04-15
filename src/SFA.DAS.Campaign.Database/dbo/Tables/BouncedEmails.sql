@@ -2,7 +2,7 @@
 (
 	Id				BIGINT IDENTITY (1, 1) PRIMARY KEY,
 	ExternalId		INT,
-	CampaignId		BIGINT NOT NULL,
+	CampaignId		BIGINT NULL,
 	ContactEmail	VARCHAR(255),
 	BounceDate		DATETIME2,
 	BounceReason	VARCHAR(255),
