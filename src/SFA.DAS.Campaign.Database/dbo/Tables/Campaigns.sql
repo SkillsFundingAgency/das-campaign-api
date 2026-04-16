@@ -1,6 +1,7 @@
 ﻿CREATE TABLE dbo.Campaigns
 (
 	Id					BIGINT IDENTITY (1, 1) PRIMARY KEY,
+	CampaignId			BIGINT,
 	ExternalId			INT,
 	[Name]				VARCHAR(MAX),
 	[Type]				VARCHAR(255),
