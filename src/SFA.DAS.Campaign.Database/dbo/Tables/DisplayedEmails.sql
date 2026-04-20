@@ -1,10 +1,10 @@
 ﻿CREATE TABLE dbo.DisplayedEmails
 (
 	Id					BIGINT IDENTITY (1, 1) PRIMARY KEY,
-	ExternalId			INT,
-	CampaignId			BIGINT NULL,
-	ContactEmail		VARCHAR(255),
-	DisplayedDate		DATETIME2,
+	ExternalId			INT NOT NULL,
+	CampaignId			BIGINT NOT NULL,
+	ContactEmail		VARCHAR(255) NOT NULL,
+	DisplayedDate		DATETIME2 NOT NULL,
 	[Format]			VARCHAR(255),
 	TimeDisplayed		INT,
 	IsSuspectedBot		BIT,

@@ -1,31 +1,37 @@
 ﻿CREATE PROCEDURE Usp_Campaigns_Upsert
 (
-    @CampaignId         BIGINT,
-    @ExternalId         INT = NULL,
-    @Name               VARCHAR(MAX) = NULL,
-    @Type               VARCHAR(255) = NULL,
-    @CreatedBy          VARCHAR(255) = NULL,
-    @CreatedOn          DATETIME2(7) = NULL,
-    @ModifiedBy         VARCHAR(255) = NULL,
-    @ModifiedOn         DATETIME2(7) = NULL,
-    @FirstSendDate      DATETIME2(7) = NULL,
-    @LastSendDate       DATETIME2(7) = NULL,
-    @FromEmailAddress   VARCHAR(255) = NULL,
-    @FromName           VARCHAR(255) = NULL,
-    @ReplyEmailAddress  VARCHAR(255) = NULL,
-    @Subject            VARCHAR(MAX) = NULL,
-    @SubStatus          VARCHAR(255) = NULL,
-    @ContactCount       INT = NULL,
-    @Account            VARCHAR(255) = NULL
+    @ExternalCampaignId     BIGINT,
+    @ExternalSendId         INT = NULL,
+    @CampaignName           VARCHAR(MAX) = NULL,
+    @SendName               VARCHAR(MAX) = NULL,
+    @Type                   VARCHAR(255) = NULL,
+    @CreatedBy              VARCHAR(255) = NULL,
+    @CreatedOn              DATETIME2(7) = NULL,
+    @ModifiedBy             VARCHAR(255) = NULL,
+    @ModifiedOn             DATETIME2(7) = NULL,
+    @FirstSendDate          DATETIME2(7) = NULL,
+    @LastSendDate           DATETIME2(7) = NULL,
+    @FromEmailAddress       VARCHAR(255) = NULL,
+    @FromName               VARCHAR(255) = NULL,
+    @ReplyEmailAddress      VARCHAR(255) = NULL,
+    @Subject                VARCHAR(MAX) = NULL,
+    @SubStatus              VARCHAR(255) = NULL,
+    @ContactCount           INT = NULL,
+    @Account                VARCHAR(255) = NULL
 )
 AS
 BEGIN
 
+    DECLARE @Result TABLE (Id INT);
+
     MERGE INTO dbo.Campaigns AS [Target]
-    USING (SELECT @CampaignId AS CampaignId) AS [Source] ON [Target].Id = [Source].CampaignId
+    USING (SELECT @ExternalCampaignId AS CampaignId, @ExternalSendId AS SendId) AS [Source] 
+            ON [Target].ExternalCampaignId = [Source].CampaignId AND [Target].ExternalSendId = [Source].SendId
+
     WHEN MATCHED THEN
         UPDATE SET
-            [Name] = @Name,
+            SendName = @SendName,
+            CampaignName = @CampaignName,
             [Type] = @Type,
             CreatedBy = @CreatedBy,
             CreatedOn = @CreatedOn,
@@ -40,13 +46,23 @@ BEGIN
             SubStatus = @SubStatus,
             ContactCount = @ContactCount,
             Account = @Account
-    WHEN NOT MATCHED THEN
-        INSERT (ExternalId, [Name], [Type], CreatedBy, CreatedOn, ModifiedBy, ModifiedOn, 
-                FirstSendDate, LastSendDate, FromEmailAddress, FromName, ReplyEmailAddress, 
-                [Subject], SubStatus, ContactCount, Account)
-        VALUES (@ExternalId, @Name, @Type, @CreatedBy, @CreatedOn, @ModifiedBy, @ModifiedOn,
-                @FirstSendDate, @LastSendDate, @FromEmailAddress, @FromName, @ReplyEmailAddress,
-                @Subject, @SubStatus, @ContactCount, @Account);
 
+    WHEN NOT MATCHED THEN
+        INSERT (
+            ExternalSendId, ExternalCampaignId, SendName, CampaignName, [Type],
+            CreatedBy, CreatedOn, ModifiedBy, ModifiedOn,
+            FirstSendDate, LastSendDate, FromEmailAddress, FromName,
+            ReplyEmailAddress, [Subject], SubStatus, ContactCount, Account
+        )
+        VALUES (
+            @ExternalSendId, @ExternalCampaignId, @SendName, @CampaignName, @Type,
+            @CreatedBy, @CreatedOn, @ModifiedBy, @ModifiedOn,
+            @FirstSendDate, @LastSendDate, @FromEmailAddress, @FromName,
+            @ReplyEmailAddress, @Subject, @SubStatus, @ContactCount, @Account
+        )
+    OUTPUT inserted.Id INTO @Result;
+
+    -- Return the Id
+    SELECT TOP 1 Id FROM @Result;
 END
 GO
