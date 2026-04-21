@@ -26,11 +26,11 @@ BEGIN
 
     MERGE INTO dbo.Campaigns AS [Target]
     USING (SELECT @ExternalCampaignId AS CampaignId, @ExternalSendId AS SendId) AS [Source] 
-            ON [Target].ExternalCampaignId = [Source].CampaignId AND [Target].ExternalSendId = [Source].SendId
+            ON [Target].CampaignId = [Source].CampaignId AND [Target].ExternalId = [Source].SendId
 
     WHEN MATCHED THEN
         UPDATE SET
-            SendName = @SendName,
+            [Name] = @SendName,
             CampaignName = @CampaignName,
             [Type] = @Type,
             CreatedBy = @CreatedBy,
@@ -49,7 +49,7 @@ BEGIN
 
     WHEN NOT MATCHED THEN
         INSERT (
-            ExternalSendId, ExternalCampaignId, SendName, CampaignName, [Type],
+            ExternalId, CampaignId, [Name], CampaignName, [Type],
             CreatedBy, CreatedOn, ModifiedBy, ModifiedOn,
             FirstSendDate, LastSendDate, FromEmailAddress, FromName,
             ReplyEmailAddress, [Subject], SubStatus, ContactCount, Account
