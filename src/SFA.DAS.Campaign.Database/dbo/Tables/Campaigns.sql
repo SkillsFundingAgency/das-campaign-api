@@ -1,10 +1,10 @@
 ﻿CREATE TABLE dbo.Campaigns
 (
 	Id					BIGINT IDENTITY (1, 1) PRIMARY KEY,
-	ExternalSendId		INT,
-	ExternalCampaignId	BIGINT,
+	ExternalId			INT,
+	CampaignId			BIGINT,
 	CampaignName		VARCHAR(MAX),
-	SendName			VARCHAR(MAX),
+	[Name]				VARCHAR(MAX),
 	[Type]				VARCHAR(255),
 	CreatedBy			VARCHAR(255),
 	CreatedOn			DATETIME2,
