@@ -5,7 +5,7 @@
 AS
 BEGIN
 
-    SELECT  Id, ExternalCampaignId AS CampaignId, CampaignName, ExternalSendId AS SendId, SendName, [Type], 
+    SELECT  Id, CampaignId, CampaignName, ExternalId AS SendId, [Name], [Type], 
             CreatedBy, CreatedOn, ModifiedBy, ModifiedOn, FirstSendDate, LastSendDate, FromEmailAddress, 
             FromName, ReplyEmailAddress, [Subject], SubStatus, ContactCount, Account
     FROM    dbo.Campaigns WITH (NOLOCK)
