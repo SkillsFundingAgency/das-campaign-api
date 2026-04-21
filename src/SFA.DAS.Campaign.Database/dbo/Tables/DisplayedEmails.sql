@@ -7,7 +7,7 @@
 	DisplayedDate		DATETIME2,
 	[Format]			VARCHAR(255),
 	TimeDisplayed		INT,
-	IsSuspectedBot		BIT DEFAULT(0) NOT NULL,
+	IsSuspectedBot		BIT DEFAULT(0),
 	Device				VARCHAR(255),
 	ClientName			VARCHAR(255),
 	Os					VARCHAR(255),
