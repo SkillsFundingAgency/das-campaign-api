@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE Usp_CampaignImportMetadata_Upsert
 (
+    @SendId             INT,
     @CampaignId         BIGINT,
     @IsImportComplete   BIT,
     @ImportStartDate    DATETIME2(7),
@@ -8,16 +9,29 @@
 AS
 BEGIN
 
+    DECLARE @Result TABLE (Id INT);
+
+    IF @SendId IS NULL
+    BEGIN
+        SELECT TOP 1 @SendId = ExternalId FROM dbo.Campaigns WHERE Id = @CampaignId;
+    END
+
     MERGE INTO dbo.CampaignImportMetadata AS [Target]
-    USING (SELECT @CampaignId AS CampaignId) AS [Source] ON [Target].CampaignId = [Source].CampaignId
+    USING (SELECT @CampaignId AS CampaignId, @SendId AS SendId) AS [Source] 
+            ON [Target].CampaignId = [Source].CampaignId AND [Target].SendId = [Source].SendId
+    
     WHEN MATCHED THEN
         UPDATE SET
             IsImportComplete = @IsImportComplete,
             ImportStartDate = @ImportStartDate,
             ImportEndDate = @ImportEndDate
-    WHEN NOT MATCHED THEN
-        INSERT (CampaignId, IsImportComplete, ImportStartDate, ImportEndDate)
-        VALUES (@CampaignId, @IsImportComplete, @ImportStartDate, @ImportEndDate);
 
+    WHEN NOT MATCHED THEN
+        INSERT (SendId, CampaignId, IsImportComplete, ImportStartDate, ImportEndDate)
+        VALUES (@SendId, @CampaignId, @IsImportComplete, @ImportStartDate, @ImportEndDate)
+    OUTPUT inserted.Id INTO @Result;
+
+    -- Return the Id
+    SELECT TOP 1 Id FROM @Result;
 END
 GO
