@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE Usp_CampaignImportMetadata_Upsert
 (
+    @SendId             INT,
     @CampaignId         BIGINT,
     @IsImportComplete   BIT,
     @ImportStartDate    DATETIME2(7),
@@ -9,15 +10,15 @@ AS
 BEGIN
 
     MERGE INTO dbo.CampaignImportMetadata AS [Target]
-    USING (SELECT @CampaignId AS CampaignId) AS [Source] ON [Target].CampaignId = [Source].CampaignId
+    USING (SELECT @CampaignId AS CampaignId, @SendId AS SendId) AS [Source] ON [Target].CampaignId = [Source].CampaignId AND [Target].SendId = [Source].SendId
     WHEN MATCHED THEN
         UPDATE SET
             IsImportComplete = @IsImportComplete,
             ImportStartDate = @ImportStartDate,
             ImportEndDate = @ImportEndDate
     WHEN NOT MATCHED THEN
-        INSERT (CampaignId, IsImportComplete, ImportStartDate, ImportEndDate)
-        VALUES (@CampaignId, @IsImportComplete, @ImportStartDate, @ImportEndDate);
+        INSERT (SendId, CampaignId, IsImportComplete, ImportStartDate, ImportEndDate)
+        VALUES (@SendId, @CampaignId, @IsImportComplete, @ImportStartDate, @ImportEndDate);
 
 END
 GO
