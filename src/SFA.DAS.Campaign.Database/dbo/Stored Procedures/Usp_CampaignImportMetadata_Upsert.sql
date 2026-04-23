@@ -29,9 +29,9 @@ BEGIN
     WHEN NOT MATCHED THEN
         INSERT (SendId, CampaignId, IsImportComplete, ImportStartDate, ImportEndDate)
         VALUES (@SendId, @CampaignId, @IsImportComplete, @ImportStartDate, @ImportEndDate)
-    OUTPUT inserted.SendId INTO @Result;
+    OUTPUT inserted.Id INTO @Result;
 
     -- Return the Id
-    SELECT TOP 1 SendId FROM @Result;
+    SELECT TOP 1 Id FROM @Result;
 END
 GO
