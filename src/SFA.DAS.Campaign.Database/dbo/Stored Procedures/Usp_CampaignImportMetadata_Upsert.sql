@@ -11,7 +11,7 @@ BEGIN
 
     DECLARE @Result TABLE (Id INT);
 
-    IF @SendId IS NULL
+    IF ISNULL(@SendId, 0) = 0
     BEGIN
         SELECT TOP 1 @SendId = ExternalId FROM dbo.Campaigns WHERE Id = @CampaignId;
     END
@@ -29,7 +29,7 @@ BEGIN
     WHEN NOT MATCHED THEN
         INSERT (SendId, CampaignId, IsImportComplete, ImportStartDate, ImportEndDate)
         VALUES (@SendId, @CampaignId, @IsImportComplete, @ImportStartDate, @ImportEndDate)
-    OUTPUT inserted.Id INTO @Result;
+    OUTPUT inserted.SendId INTO @Result;
 
     -- Return the Id
     SELECT TOP 1 Id FROM @Result;
