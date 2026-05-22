@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Azure.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Options;
@@ -52,9 +53,10 @@ public class CampaignDataContext : DbContext, ICampaignDataContext
             return;
         }
 
-        var connection = new SqlConnection { ConnectionString = _configuration!.SqlConnectionString, };
-        optionsBuilder.UseSqlServer(connection, options =>
-                        options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(20), null)).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        var credential = new DefaultAzureCredential();
+        var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
+        var connection = new SqlConnection { ConnectionString = _configuration!.SqlConnectionString, AccessToken = token.Token };
+        optionsBuilder.UseSqlServer(connection, options => options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(20), null)).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
         // Note: useful to keep here
         optionsBuilder.LogTo(message => Debug.WriteLine(message));

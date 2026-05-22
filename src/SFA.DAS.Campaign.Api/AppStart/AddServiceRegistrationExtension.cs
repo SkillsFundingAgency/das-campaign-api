@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.Campaign.Api.Data;
 using SFA.DAS.Campaign.Api.Data.Repositories;
@@ -35,7 +34,6 @@ public static class AddServiceRegistrationExtension
         }
         else
         {
-            services.AddSingleton(new AzureServiceTokenProvider());
             services.AddDbContext<CampaignDataContext>(ServiceLifetime.Transient);
         }
 
@@ -46,8 +44,7 @@ public static class AddServiceRegistrationExtension
     public static void ConfigureHealthChecks(this IServiceCollection services)
     {
         // health checks
-        services.AddHealthChecks()
-                .AddCheck<DefaultHealthCheck>("default");
+        services.AddHealthChecks().AddCheck<DefaultHealthCheck>("default");
     }
 
     public static void RegisterDasEncodingService(this IServiceCollection services, IConfiguration configuration)
