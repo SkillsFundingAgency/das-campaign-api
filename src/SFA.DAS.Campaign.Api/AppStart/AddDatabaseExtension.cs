@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.Campaign.Api.Data;
 using SFA.DAS.Campaign.Api.Domain.Configuration;
 using System.Diagnostics.CodeAnalysis;
@@ -21,7 +20,6 @@ public static class AddDatabaseExtension
         }
         else
         {
-            services.AddSingleton(new AzureServiceTokenProvider());
             services.AddDbContext<CampaignDataContext>(ServiceLifetime.Transient);
         }
 
