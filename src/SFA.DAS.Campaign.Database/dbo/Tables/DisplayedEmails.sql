@@ -12,7 +12,7 @@
 	ClientName			VARCHAR(255),
 	Os					VARCHAR(255),
 	OsFamily			VARCHAR(255),
-	IpAddress			VARCHAR(15),
+	IpAddress			VARCHAR(50),
 	ClientType			VARCHAR(255),
 	ClientFamily		VARCHAR(255),
 	CONSTRAINT FK_DisplayedEmails_Campaigns FOREIGN KEY ( CampaignId ) REFERENCES dbo.Campaigns ( Id )
