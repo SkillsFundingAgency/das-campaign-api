@@ -23,7 +23,7 @@ public interface ICampaignDataContext
 public class CampaignDataContext : DbContext, ICampaignDataContext
 {
     public DbSet<UserData> UserData { get; set; }
-
+    private static readonly string AzureDatabaseScope = "https://database.windows.net/.default";
     private readonly CampaignConfiguration? _configuration;
     public CampaignDataContext() { }
     public CampaignDataContext(DbContextOptions options) : base(options) { }
@@ -52,9 +52,9 @@ public class CampaignDataContext : DbContext, ICampaignDataContext
             optionsBuilder.UseSqlServer().UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             return;
         }
-
+        
         var credential = new DefaultAzureCredential();
-        var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
+        var token = credential.GetToken(new Azure.Core.TokenRequestContext([AzureDatabaseScope]));
         var connection = new SqlConnection { ConnectionString = _configuration!.SqlConnectionString, AccessToken = token.Token };
         optionsBuilder.UseSqlServer(connection, options => options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(20), null)).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
