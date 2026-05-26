@@ -7,7 +7,6 @@
 	BounceDate		DATETIME2,
 	BounceReason	VARCHAR(255),
 	BounceType		VARCHAR(255),
-	ResponseText	VARCHAR(MAX),
-	CONSTRAINT FK_BouncedEmails_Campaigns FOREIGN KEY ( CampaignId ) REFERENCES dbo.Campaigns ( CampaignId )
+	ResponseText	VARCHAR(MAX)
 ) ON [PRIMARY]
 GO
