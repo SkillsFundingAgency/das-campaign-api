@@ -5,7 +5,6 @@
 	CampaignId			BIGINT,
 	IsImportComplete	BIT,
 	ImportStartDate		DATETIME2,
-	ImportEndDate		DATETIME2,
-	CONSTRAINT FK_CampaignImportMetadata_Campaigns FOREIGN KEY ( CampaignId ) REFERENCES dbo.Campaigns ( Id )
+	ImportEndDate		DATETIME2
 ) ON [PRIMARY]
 GO
