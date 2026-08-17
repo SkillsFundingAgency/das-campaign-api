@@ -10,3 +10,11 @@ CREATE TABLE import.BouncedContacts (
     CONSTRAINT PK_BouncedContacts PRIMARY KEY (ID)
 );
 GO
+
+CREATE INDEX IX_BouncedContacts_SendContactID ON import.BouncedContacts (SendContactID);
+GO
+
+ALTER TABLE import.BouncedContacts
+ADD CONSTRAINT FK_BouncedContacts_SendContacts
+    FOREIGN KEY (SendContactID) REFERENCES import.SendContacts (ID);
+GO

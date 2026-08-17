@@ -1,2 +1,0 @@
-CREATE INDEX IX_UnsubscribedContacts_SendContactID ON import.UnsubscribedContacts (SendContactID);
-GO

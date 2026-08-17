@@ -61,8 +61,6 @@
     <Folder Include="dbo\Stored Procedures" />
     <Folder Include="import" />
     <Folder Include="import\Tables" />
-    <Folder Include="import\Indexes" />
-    <Folder Include="import\Keys" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\UserData.sql" />
@@ -87,23 +85,5 @@
     <Build Include="import\Tables\Sends.sql" />
     <Build Include="import\Tables\UnsubscribedContacts.sql" />
     <Build Include="import\Tables\UserAgents.sql" />
-    <Build Include="import\Keys\BouncedContacts.fks.sql" />
-    <Build Include="import\Keys\CampaignImportMetadata.fks.sql" />
-    <Build Include="import\Keys\ClickedContacts.fks.sql" />
-    <Build Include="import\Keys\DisplayedContacts.fks.sql" />
-    <Build Include="import\Keys\Links.fks.sql" />
-    <Build Include="import\Keys\SendContacts.fks.sql" />
-    <Build Include="import\Keys\Sends.fks.sql" />
-    <Build Include="import\Keys\UnsubscribedContacts.fks.sql" />
-    <Build Include="import\Keys\UserAgents.fks.sql" />
-    <Build Include="import\Indexes\BouncedContacts.indexes.sql" />
-    <Build Include="import\Indexes\CampaignImportMetadata.indexes.sql" />
-    <Build Include="import\Indexes\ClickedContacts.indexes.sql" />
-    <Build Include="import\Indexes\DisplayedContacts.indexes.sql" />
-    <Build Include="import\Indexes\Links.indexes.sql" />
-    <Build Include="import\Indexes\SendContacts.indexes.sql" />
-    <Build Include="import\Indexes\Sends.indexes.sql" />
-    <Build Include="import\Indexes\UnsubscribedContacts.indexes.sql" />
-    <Build Include="import\Indexes\UserAgents.indexes.sql" />
   </ItemGroup>
 </Project>

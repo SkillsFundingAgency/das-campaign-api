@@ -8,3 +8,11 @@ CREATE TABLE import.Links (
     CONSTRAINT PK_Links PRIMARY KEY (ID)
 );
 GO
+
+CREATE INDEX IX_Links_SendID ON import.Links (SendID);
+GO
+
+ALTER TABLE import.Links
+ADD CONSTRAINT FK_Links_Sends
+    FOREIGN KEY (SendID) REFERENCES import.Sends (ID);
+GO

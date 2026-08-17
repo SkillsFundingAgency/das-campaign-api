@@ -27,3 +27,11 @@ CREATE TABLE import.Sends (
     CONSTRAINT PK_Sends PRIMARY KEY (ID)
 );
 GO
+
+CREATE INDEX IX_Sends_CampaignID ON import.Sends (CampaignID);
+GO
+
+ALTER TABLE import.Sends
+ADD CONSTRAINT FK_Sends_Campaigns
+    FOREIGN KEY (CampaignID) REFERENCES import.Campaigns (ID);
+GO

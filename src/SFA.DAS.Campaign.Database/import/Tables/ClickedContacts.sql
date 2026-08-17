@@ -10,3 +10,21 @@ CREATE TABLE import.ClickedContacts (
     CONSTRAINT PK_ClickedContacts PRIMARY KEY (ID)
 );
 GO
+
+CREATE INDEX IX_ClickedContacts_SendContactID ON import.ClickedContacts (SendContactID);
+CREATE INDEX IX_ClickedContacts_LinkID ON import.ClickedContacts (LinkID);
+CREATE INDEX IX_ClickedContacts_UserAgentID ON import.ClickedContacts (UserAgentID);
+GO
+
+ALTER TABLE import.ClickedContacts
+ADD CONSTRAINT FK_ClickedContacts_SendContacts
+    FOREIGN KEY (SendContactID) REFERENCES import.SendContacts (ID);
+
+ALTER TABLE import.ClickedContacts
+ADD CONSTRAINT FK_ClickedContacts_Links
+    FOREIGN KEY (LinkID) REFERENCES import.Links (ID);
+
+ALTER TABLE import.ClickedContacts
+ADD CONSTRAINT FK_ClickedContacts_UserAgents
+    FOREIGN KEY (UserAgentID) REFERENCES import.UserAgents (ID);
+GO

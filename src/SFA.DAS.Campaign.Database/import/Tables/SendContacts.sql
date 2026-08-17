@@ -7,3 +7,16 @@ CREATE TABLE import.SendContacts (
     CONSTRAINT PK_SendContacts PRIMARY KEY (ID)
 );
 GO
+
+CREATE INDEX IX_SendContacts_SendID ON import.SendContacts (SendID);
+CREATE INDEX IX_SendContacts_ContactID ON import.SendContacts (ContactID);
+GO
+
+ALTER TABLE import.SendContacts
+ADD CONSTRAINT FK_SendContacts_Sends
+    FOREIGN KEY (SendID) REFERENCES import.Sends (ID);
+
+ALTER TABLE import.SendContacts
+ADD CONSTRAINT FK_SendContacts_Contacts
+    FOREIGN KEY (ContactID) REFERENCES import.Contacts (ID);
+GO
