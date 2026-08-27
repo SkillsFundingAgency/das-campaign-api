@@ -59,6 +59,8 @@
     <Folder Include="dbo" />
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="import" />
+    <Folder Include="import\Tables" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\UserData.sql" />
@@ -72,5 +74,16 @@
     <Build Include="dbo\Stored Procedures\Usp_CampaignImportMetadata_Get.sql" />
     <Build Include="dbo\Stored Procedures\Usp_Campaigns_Get.sql" />
     <Build Include="dbo\Stored Procedures\Usp_Campaigns_Upsert.sql" />
+    <Build Include="import\Tables\BouncedContacts.sql" />
+    <Build Include="import\Tables\CampaignImportMetadata.sql" />
+    <Build Include="import\Tables\Campaigns.sql" />
+    <Build Include="import\Tables\ClickedContacts.sql" />
+    <Build Include="import\Tables\Contacts.sql" />
+    <Build Include="import\Tables\DisplayedContacts.sql" />
+    <Build Include="import\Tables\Links.sql" />
+    <Build Include="import\Tables\SendContacts.sql" />
+    <Build Include="import\Tables\Sends.sql" />
+    <Build Include="import\Tables\UnsubscribedContacts.sql" />
+    <Build Include="import\Tables\UserAgents.sql" />
   </ItemGroup>
 </Project>

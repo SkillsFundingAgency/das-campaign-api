@@ -1,0 +1,37 @@
+CREATE TABLE import.Sends (
+    ID INT NOT NULL,
+    Name NVARCHAR(255) NULL,
+    SubaccountID INT NULL,
+    CampaignID INT NULL,
+    SendTypeID INT NULL,
+    MessageDesignID INT NULL,
+    SendType NVARCHAR(50) NULL,
+    Status NVARCHAR(50) NULL,
+    SubStatus NVARCHAR(50) NULL,
+    SendDate DATETIME2(3) NULL,
+    SendCompletedDate DATETIME2(3) NULL,
+    IsOutbox BIT NULL,
+    CampaignType NVARCHAR(100) NULL,
+    MessageType NVARCHAR(100) NULL,
+    ContactCount INT NULL,
+    CreatedBy NVARCHAR(255) NULL,
+    CreatedByUserID INT NULL,
+    ConfirmedByUserID INT NULL,
+    IsArchived BIT NULL,
+    Sequence INT NULL,
+    CreatedDate DATETIME2(3) NULL,
+    FromName NVARCHAR(255) NULL,
+    FromEmail NVARCHAR(320) NULL,
+    ReplyEmail NVARCHAR(320) NULL,
+    SubjectLine NVARCHAR(500) NULL,
+    CONSTRAINT PK_Sends PRIMARY KEY (ID)
+);
+GO
+
+CREATE INDEX IX_Sends_CampaignID ON import.Sends (CampaignID);
+GO
+
+ALTER TABLE import.Sends
+ADD CONSTRAINT FK_Sends_Campaigns
+    FOREIGN KEY (CampaignID) REFERENCES import.Campaigns (ID);
+GO
