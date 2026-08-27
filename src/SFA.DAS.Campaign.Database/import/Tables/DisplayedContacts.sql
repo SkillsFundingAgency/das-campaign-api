@@ -9,11 +9,11 @@ CREATE TABLE import.DisplayedContacts (
     IsSuspectedBOT BIT NULL,
     CONSTRAINT PK_DisplayedContacts PRIMARY KEY (ID)
 );
-GO
+
 
 CREATE INDEX IX_DisplayedContacts_SendContactID ON import.DisplayedContacts (SendContactID);
 CREATE INDEX IX_DisplayedContacts_UserAgentID ON import.DisplayedContacts (UserAgentID);
-GO
+
 
 ALTER TABLE import.DisplayedContacts
 ADD CONSTRAINT FK_DisplayedContacts_SendContacts
