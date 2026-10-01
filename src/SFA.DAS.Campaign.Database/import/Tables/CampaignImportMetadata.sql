@@ -10,12 +10,14 @@ CREATE TABLE import.CampaignImportMetadata (
 GO
 
 CREATE INDEX IX_CampaignImportMetadata_SendID ON import.CampaignImportMetadata (SendID);
+GO
 CREATE INDEX IX_CampaignImportMetadata_CampaignID ON import.CampaignImportMetadata (CampaignID);
 GO
 
 ALTER TABLE import.CampaignImportMetadata
 ADD CONSTRAINT FK_CampaignImportMetadata_Sends
     FOREIGN KEY (SendID) REFERENCES import.Sends (ID);
+GO
 
 ALTER TABLE import.CampaignImportMetadata
 ADD CONSTRAINT FK_CampaignImportMetadata_Campaigns
