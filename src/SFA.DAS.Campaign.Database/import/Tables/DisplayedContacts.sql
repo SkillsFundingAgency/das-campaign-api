@@ -15,13 +15,3 @@ CREATE INDEX IX_DisplayedContacts_SendContactID ON import.DisplayedContacts (Sen
 GO
 CREATE INDEX IX_DisplayedContacts_UserAgentID ON import.DisplayedContacts (UserAgentID);
 GO
-
-ALTER TABLE import.DisplayedContacts
-ADD CONSTRAINT FK_DisplayedContacts_SendContacts
-    FOREIGN KEY (SendContactID) REFERENCES import.SendContacts (ID);
-GO
-
-ALTER TABLE import.DisplayedContacts
-ADD CONSTRAINT FK_DisplayedContacts_UserAgents
-    FOREIGN KEY (UserAgentID) REFERENCES import.UserAgents (ID);
-GO
