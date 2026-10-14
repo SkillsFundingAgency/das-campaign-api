@@ -11,8 +11,3 @@ GO
 
 CREATE INDEX IX_UnsubscribedContacts_SendContactID ON import.UnsubscribedContacts (SendContactID);
 GO
-
-ALTER TABLE import.UnsubscribedContacts
-ADD CONSTRAINT FK_UnsubscribedContacts_SendContacts
-    FOREIGN KEY (SendContactID) REFERENCES import.SendContacts (ID);
-GO
