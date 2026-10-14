@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SFA.DAS.Api.Common.AppStart;
@@ -26,6 +26,7 @@ internal class Startup
     public Startup(IConfiguration configuration)
     {
         _environmentName = configuration["EnvironmentName"]!;
+
         if (_environmentName == "INTEGRATION")
         {
             Configuration = configuration;
@@ -35,17 +36,18 @@ internal class Startup
         var config = new ConfigurationBuilder()
             .AddConfiguration(configuration)
             .AddAzureTableStorage(options =>
-                {
-                    options.ConfigurationKeys = configuration["ConfigNames"]!.Split(",");
-                    options.EnvironmentName = _environmentName;
-                    options.PreFixConfigurationKeys = false;
-                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                });
+            {
+                options.ConfigurationKeys = configuration["ConfigNames"]!.Split(",");
+                options.EnvironmentName = _environmentName;
+                options.PreFixConfigurationKeys = false;
+                options.StorageConnectionString =
+                    configuration["ConfigurationStorageConnectionString"];
+            });
 
-        #if DEBUG
+#if DEBUG
         config.AddJsonFile("appsettings.Development.json", true);
         config.AddJsonFile("appsettings.json", true);
-        #endif
+#endif
 
         Configuration = config.Build();
     }
@@ -58,89 +60,138 @@ internal class Startup
     {
         if (!IsEnvironmentLocalOrDev)
         {
-            var azureAdConfiguration = Configuration.GetSection("AzureAd").Get<AzureActiveDirectoryConfiguration>();
+            var azureAdConfiguration = Configuration
+                .GetSection("AzureAd")
+                .Get<AzureActiveDirectoryConfiguration>();
 
             var policies = new Dictionary<string, string>
             {
-                { PolicyNames.Default, "Default" },
+                { PolicyNames.Default, "Default" }
             };
+
             services.AddAuthentication(azureAdConfiguration, policies);
+
             services.AddHealthChecks()
-                    .AddDbContextCheck<CampaignDataContext>();
+                .AddDbContextCheck<CampaignDataContext>();
         }
 
-        services.Configure<CampaignConfiguration>(Configuration.GetSection(nameof(CampaignConfiguration)));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<CampaignConfiguration>>()!.Value);
-        var campaignConfiguration = Configuration.GetSection(nameof(CampaignConfiguration)).Get<CampaignConfiguration>();
+        services.Configure<CampaignConfiguration>(
+            Configuration.GetSection(nameof(CampaignConfiguration)));
 
-        services.AddMvc(o =>
+        services.AddSingleton(cfg =>
+            cfg.GetService<IOptions<CampaignConfiguration>>()!.Value);
+
+        var campaignConfiguration = Configuration
+            .GetSection(nameof(CampaignConfiguration))
+            .Get<CampaignConfiguration>();
+
+        services.AddMvc(options =>
+        {
+            if (!IsEnvironmentLocalOrDev)
             {
-                if (!IsEnvironmentLocalOrDev)
-                {
-                    o.Conventions.Add(new AuthorizeControllerModelConvention(new List<string> { Capacity = 0 }));
-                }
-                o.Conventions.Add(new ApiExplorerGroupPerVersionConvention());
+                options.Conventions.Add(
+                    new AuthorizeControllerModelConvention(
+                        new List<string> { Capacity = 0 }));
+            }
+
+            options.Conventions.Add(
+                new ApiExplorerGroupPerVersionConvention());
+        })
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(
+                    new JsonStringEnumConverter());
             })
-            .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); })
             .AddNewtonsoftJson(options =>
             {
-                options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.Converters.Add(
+                    new StringEnumConverter());
+
+                options.SerializerSettings.ReferenceLoopHandling =
+                    ReferenceLoopHandling.Ignore;
             });
 
         services.RegisterDasEncodingService(Configuration);
         services.AddApplicationDependencies(Configuration);
-        AddDatabaseExtension.AddDatabaseRegistration(services, campaignConfiguration!, Configuration["EnvironmentName"]!);
-        services.AddOpenTelemetryRegistration(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]!);
+
+        AddDatabaseExtension.AddDatabaseRegistration(
+            services,
+            campaignConfiguration!,
+            Configuration["EnvironmentName"]!);
+
+        services.AddOpenTelemetryRegistration(
+            Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]!);
+
         services.ConfigureHealthChecks();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(c =>
+
+        services.AddSwaggerGen(options =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "SFA.DAS.Campaign.Api", Version = "v1" });
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "SFA.DAS.Campaign.Api",
+                Version = "v1"
+            });
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer"
+                Scheme = "Bearer",
+                Description = "Enter 'Bearer' followed by your access token."
             });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
+
+            options.AddSecurityRequirement(document =>
+                new OpenApiSecurityRequirement
                 {
-                    new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
-            });
-            c.OperationFilter<SwaggerVersionHeaderFilter>();
-            c.DocumentFilter<JsonPatchDocumentFilter>();
-            c.DocumentFilter<HealthChecksFilter>();
-            c.MapType<UserData>(() => new OpenApiSchema { Type = "string" });
-        });
-        services.AddApiVersioning(opt =>
+                        new OpenApiSecuritySchemeReference("Bearer", document),
+                        new List<string>()
+                    }
+                });
+
+            options.DocumentFilter<HealthChecksFilter>();
+
+            options.MapType<UserData>(() => new OpenApiSchema
             {
-                opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
-                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                Type = JsonSchemaType.String
             });
-        services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
+        });
+
+        services.AddApiVersioning(options =>
+        {
+            options.ApiVersionReader =
+                new HeaderApiVersionReader("X-Version");
+
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+        });
+
+        services.Configure<RouteOptions>(options =>
+            options.LowercaseUrls = true);
     }
 
-    public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public static void Configure(
+        IApplicationBuilder app,
+        IWebHostEnvironment env)
     {
-        if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
         app.UseAuthentication();
         app.UseSwagger();
+
         app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "SFA.DAS.Campaign.Api v1");
-                options.RoutePrefix = string.Empty;
-            });
+        {
+            options.SwaggerEndpoint(
+                "/swagger/v1/swagger.json",
+                "SFA.DAS.Campaign.Api v1");
+
+            options.RoutePrefix = string.Empty;
+        });
+
         app.UseHealthChecks();
         app.UseHttpsRedirection();
         app.UseRouting();
@@ -152,12 +203,18 @@ internal class Startup
             {
                 context.Response.Headers.Remove("X-AspNet-Version");
                 context.Response.Headers.Remove("X-Powered-By");
+
                 return Task.CompletedTask;
             });
+
             await next();
         });
 
         app.UseAuthorization();
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
     }
 }

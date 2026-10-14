@@ -1,56 +1,81 @@
-﻿using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Nodes;
 
 namespace SFA.DAS.Campaign.Api.Filters;
 
 [ExcludeFromCodeCoverage]
 public class HealthChecksFilter : IDocumentFilter
 {
-    private const string HealthCheckEndpoint = @"/health";
+    private const string HealthCheckEndpoint = "/health";
+    private const string ServiceStatusTag = "Service Status";
 
-    public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+    public void Apply(
+        OpenApiDocument swaggerDoc,
+        DocumentFilterContext context)
     {
-        var pathItem = new OpenApiPathItem();
-        var operation = new OpenApiOperation();
-        operation.Tags.Add(new OpenApiTag { Name = "Service Status" });
+        swaggerDoc.Tags ??= new HashSet<OpenApiTag>();
 
-        operation.Responses ??= [];
-
-        var healthyResponse = new OpenApiResponse
+        if (!swaggerDoc.Tags.Any(tag => tag.Name == ServiceStatusTag))
         {
-            Content = new Dictionary<string, OpenApiMediaType>
+            swaggerDoc.Tags.Add(new OpenApiTag
             {
-                ["text/plain"] = new OpenApiMediaType
+                Name = ServiceStatusTag
+            });
+        }
+
+        var operation = new OpenApiOperation
+        {
+            Tags = new HashSet<OpenApiTagReference>
+            {
+                new OpenApiTagReference(ServiceStatusTag, swaggerDoc)
+            },
+            Responses = new OpenApiResponses
+            {
+                ["200"] = new OpenApiResponse
                 {
-                    Schema = new OpenApiSchema
+                    Description = "The service is healthy.",
+                    Content = new Dictionary<string, OpenApiMediaType>
                     {
-                        Type = "string",
-                        Enum = [new OpenApiString("Healthy"),]
+                        ["text/plain"] = new OpenApiMediaType
+                        {
+                            Schema = new OpenApiSchema
+                            {
+                                Type = JsonSchemaType.String,
+                                Enum = new List<JsonNode>
+                                {
+                                    JsonValue.Create("Healthy")!
+                                }
+                            }
+                        }
+                    }
+                },
+                ["503"] = new OpenApiResponse
+                {
+                    Description = "The service is unhealthy.",
+                    Content = new Dictionary<string, OpenApiMediaType>
+                    {
+                        ["text/plain"] = new OpenApiMediaType
+                        {
+                            Schema = new OpenApiSchema
+                            {
+                                Type = JsonSchemaType.String,
+                                Enum = new List<JsonNode>
+                                {
+                                    JsonValue.Create("Unhealthy")!
+                                }
+                            }
+                        }
                     }
                 }
             }
         };
 
-        operation.Responses.Add("200", healthyResponse);
+        var pathItem = new OpenApiPathItem();
+        pathItem.AddOperation(HttpMethod.Get, operation);
 
-        var unhealthyResponse = new OpenApiResponse
-        {
-            Content = new Dictionary<string, OpenApiMediaType>()
-        };
-        unhealthyResponse.Content["text/plain"] = new OpenApiMediaType
-        {
-            Schema = new OpenApiSchema
-            {
-                Type = "string",
-                Enum = [new OpenApiString("Unhealthy"),]
-            }
-        };
-
-        operation.Responses.Add("503", unhealthyResponse);
-        pathItem.AddOperation(OperationType.Get, operation);
-        swaggerDoc?.Paths.Add(HealthCheckEndpoint, pathItem);
-    }
-
+        swaggerDoc.Paths ??= new OpenApiPaths();
+        swaggerDoc.Paths[HealthCheckEndpoint] = pathItem;
+    } 
 }

@@ -1,18 +1,22 @@
-using Microsoft.AspNetCore;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
-namespace SFA.DAS.Campaign.Api;
-
-[ExcludeFromCodeCoverage]
-public static class Program
+namespace SFA.DAS.Campaign.Api
 {
-    public static void Main(string[] args)
+    [ExcludeFromCodeCoverage]
+    public static class Program
     {
-        CreateWebHostBuilder(args).Build().Run();
-    }
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-               .ConfigureKestrel(c => c.AddServerHeader = false)
-               .UseStartup<Startup>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }

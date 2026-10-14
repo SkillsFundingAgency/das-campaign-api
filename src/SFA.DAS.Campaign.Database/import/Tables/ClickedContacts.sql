@@ -9,18 +9,24 @@ CREATE TABLE import.ClickedContacts (
     IsSuspectedBOT BIT NULL,
     CONSTRAINT PK_ClickedContacts PRIMARY KEY (ID)
 );
+GO
 
 CREATE INDEX IX_ClickedContacts_SendContactID ON import.ClickedContacts (SendContactID);
+GO
 CREATE INDEX IX_ClickedContacts_LinkID ON import.ClickedContacts (LinkID);
+GO
 CREATE INDEX IX_ClickedContacts_UserAgentID ON import.ClickedContacts (UserAgentID);
+GO
 
 ALTER TABLE import.ClickedContacts
 ADD CONSTRAINT FK_ClickedContacts_SendContacts
     FOREIGN KEY (SendContactID) REFERENCES import.SendContacts (ID);
+GO
 
 ALTER TABLE import.ClickedContacts
 ADD CONSTRAINT FK_ClickedContacts_Links
     FOREIGN KEY (LinkID) REFERENCES import.Links (ID);
+GO
 
 ALTER TABLE import.ClickedContacts
 ADD CONSTRAINT FK_ClickedContacts_UserAgents

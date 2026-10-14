@@ -85,5 +85,6 @@
     <Build Include="import\Tables\Sends.sql" />
     <Build Include="import\Tables\UnsubscribedContacts.sql" />
     <Build Include="import\Tables\UserAgents.sql" />
+    <Build Include="import.schema.sql" />
   </ItemGroup>
 </Project>
