@@ -10,7 +10,6 @@ namespace SFA.DAS.Campaign.Api.Controllers;
 [Route("api/registercampaigninterest")]
 public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterestController> logger) : ControllerBase
 {
-    // POST: api/registercampaigninterest/registerinterest
     [HttpPost("registerinterest")]
     [ProducesResponseType(typeof(UserDataEntity), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(UserDataEntity), StatusCodes.Status400BadRequest)]

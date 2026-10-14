@@ -1,0 +1,20 @@
+CREATE TABLE import.SendContacts (
+    ID INT NOT NULL,
+    SubaccountID INT NULL,
+    SendID INT NULL,
+    ContactID INT NULL,
+    PublicIP VARCHAR(45) NULL,
+    CONSTRAINT PK_SendContacts PRIMARY KEY (ID)
+);
+GO
+
+CREATE INDEX IX_SendContacts_SendID ON import.SendContacts (SendID);
+GO
+CREATE INDEX IX_SendContacts_ContactID ON import.SendContacts (ContactID);
+GO
+
+ALTER TABLE import.SendContacts
+ADD CONSTRAINT FK_SendContacts_Sends
+    FOREIGN KEY (SendID) REFERENCES import.Sends (ID);
+GO
+
