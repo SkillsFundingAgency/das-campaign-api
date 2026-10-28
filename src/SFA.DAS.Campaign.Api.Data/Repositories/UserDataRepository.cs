@@ -13,8 +13,8 @@ public class UserDataRepository(ICampaignDataContext dataContext) : IUserDataRep
 {
     public async Task<UpsertResult<UserData>> AddNewCampaignInterestAsync(UserData userData, CancellationToken cancellationToken)
     {
-        try
-        {
+        //try
+        //{
             await dataContext.UserData.AddAsync(userData, cancellationToken);
             await dataContext.SaveChangesAsync(cancellationToken);
 
@@ -29,10 +29,10 @@ public class UserDataRepository(ICampaignDataContext dataContext) : IUserDataRep
             }
 
             return UpsertResult.Create(createdUserData, true);
-        }
-        catch
-        {
-            return UpsertResult.Create(userData, false);
-        }
+        //}
+        //catch
+        //{
+        //    return UpsertResult.Create(userData, false);
+        //}
     }
 }

@@ -31,24 +31,24 @@ internal class UserDataRepositoryTests
         result.Entity.Should().BeEquivalentTo(entity);
     }
 
-    [Test, RecursiveMoqAutoData]
-    public async Task AddNewCampaignInterestAsync_Returns_False_When_Exception_Thrown(
-        UserData entity,
-        [Frozen] Mock<ICampaignDataContext> context,
-        [Greedy] UserDataRepository sut,
-        CancellationToken token)
-    {
-        // arrange
-        context.Setup(x => x.UserData).Throws<Exception>();
+    //[Test, RecursiveMoqAutoData]
+    //public async Task AddNewCampaignInterestAsync_Returns_False_When_Exception_Thrown(
+    //    UserData entity,
+    //    [Frozen] Mock<ICampaignDataContext> context,
+    //    [Greedy] UserDataRepository sut,
+    //    CancellationToken token)
+    //{
+    //    // arrange
+    //    context.Setup(x => x.UserData).Throws<Exception>();
 
-        // act
-        var result = await sut.AddNewCampaignInterestAsync(entity, token);
+    //    // act
+    //    var result = await sut.AddNewCampaignInterestAsync(entity, token);
 
-        // assert
-        context.Verify(x => x.SaveChangesAsync(token), Times.Never);
-        result.Entity.Should().BeEquivalentTo(entity);
-        result.Created.Should().BeFalse();
-    }
+    //    // assert
+    //    context.Verify(x => x.SaveChangesAsync(token), Times.Never);
+    //    result.Entity.Should().BeEquivalentTo(entity);
+    //    result.Created.Should().BeFalse();
+    //}
 
     [Test, RecursiveMoqAutoData]
     public async Task AddNewCampaignInterestAsync_Returns_False_When_Entity_Not_Found_After_Insert(

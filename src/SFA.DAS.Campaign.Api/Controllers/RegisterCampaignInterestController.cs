@@ -17,8 +17,8 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RegisterInterest([FromServices] IUserDataRepository repository, [FromBody] UserDataEntity userDataEntity, CancellationToken cancellationToken)
     {
-        try
-        {
+        //try
+        //{
             logger.LogInformation("Register Campaign Interest API: Received request to add user details to campaign");
 
             if (userDataEntity == null)
@@ -59,11 +59,11 @@ public class RegisterCampaignInterestController(ILogger<RegisterCampaignInterest
                 logger.LogError("Unable to Register Campaign Interest : An error occurred while processing the request");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Unable to Register Campaign Interest : An error occurred");
-            return StatusCode((int)HttpStatusCode.InternalServerError);
-        }
+        //}
+        //catch (Exception e)
+        //{
+        //    logger.LogError(e, "Unable to Register Campaign Interest : An error occurred");
+        //    return StatusCode((int)HttpStatusCode.InternalServerError);
+        //}
     }
 }

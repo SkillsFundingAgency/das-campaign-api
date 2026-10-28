@@ -88,20 +88,20 @@ public class RegisterCampaignInterestControllerTests
         badRequestResult!.Value.Should().BeEquivalentTo(new { message = "User details for registering interest cannot be empty" });
     }
 
-    [Test, RecursiveMoqAutoData]
-    public async Task Then_If_Exception_Is_Thrown_InternalServerError_Is_Returned(Mock<IUserDataRepository> repository, [Greedy] RegisterCampaignInterestController sut, CancellationToken token)
-    {
-        // arrange
-        repository.Setup(x => x.AddNewCampaignInterestAsync(It.IsAny<UserData>(), token)).ThrowsAsync(new Exception());
+    //[Test, RecursiveMoqAutoData]
+    //public async Task Then_If_Exception_Is_Thrown_InternalServerError_Is_Returned(Mock<IUserDataRepository> repository, [Greedy] RegisterCampaignInterestController sut, CancellationToken token)
+    //{
+    //    // arrange
+    //    repository.Setup(x => x.AddNewCampaignInterestAsync(It.IsAny<UserData>(), token)).ThrowsAsync(new Exception());
 
-        // act
-        var result = await sut.RegisterInterest(repository.Object, userDataEntity, token);
+    //    // act
+    //    var result = await sut.RegisterInterest(repository.Object, userDataEntity, token);
 
-        // assert
-        result.Should().NotBeNull();
-        result.Should().BeOfType<StatusCodeResult>();
-        result.As<StatusCodeResult>().StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-    }
+    //    // assert
+    //    result.Should().NotBeNull();
+    //    result.Should().BeOfType<StatusCodeResult>();
+    //    result.As<StatusCodeResult>().StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    //}
 
     [Test, RecursiveMoqAutoData]
     public async Task Then_If_User_Is_Not_Created_InternalServerError_Is_Returned(Mock<IUserDataRepository> repository, [Greedy] RegisterCampaignInterestController sut, CancellationToken token)
